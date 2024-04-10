@@ -18,12 +18,13 @@ const __dirname = getDirname(import.meta.url)
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
+  open: true,
   head: [['meta', { name: 'referrer', content: 'no-referrer-when-downgrade' }]],
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: "Oragekk's Blog",
-      description: '上冬十二的博客'
+      title: "SingleQuote's Blog",
+      description: '笔墨痕迹的博客'
     }
   },
   alias: {
@@ -108,7 +109,7 @@ export default defineUserConfig({
     docsearchPlugin({
       appId: 'PI9QTF572N',
       apiKey: '07e2432555d8ecdd3fb72978f0a05cdc',
-      indexName: 'oragekk',
+      indexName: 'singleQuote',
       locales: {
         '/': {
           placeholder: '搜索内容',

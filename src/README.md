@@ -4,7 +4,7 @@ layout: BlogHome
 icon: home
 title: 主页
 heroImage: /logo.svg
-heroText: Oragekk's Blog
+heroText: SingleQuote's Blog
 bgImage: "/assets/home_bg3.jpg"
 heroFullScreen: true
 tagline: Goals determine what you are going to be. —— Julius Erving
@@ -12,8 +12,8 @@ description: 「一生短暂，过程很美」 致力于分享自己涉及和了
 head:
   - - meta
     - name: keywords
-      content: oragekk, 上冬十二, Oragekk Blog, 博客, 个人博客, 极客, geek, 大前端, 设计, iOS, Flutter, Vue
-projects:
+      content: SingleQuote, 笔墨痕迹, Single Blog, 博客, 个人博客, 大前端, Vue, Golang
+# projects:
 #   - icon: /logo.svg
 #     name: 关于本站
 #     desc: 这里有关于站点的详细介绍

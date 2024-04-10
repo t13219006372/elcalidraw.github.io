@@ -45,7 +45,8 @@
 .theme-container .vp-sidebar {
   transition: 0.3s;
   top: var(--navbar-height);
-  @media (min-width: hope-config.$mobile) {
+
+  @media (min-width: hope-config.$pad) {
     z-index: 4;
     background-color: transparent;
   }
