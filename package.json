@@ -19,7 +19,7 @@
     "@vuepress/plugin-pwa": "2.0.0-rc.17",
     "@vuepress/plugin-shiki": "2.0.0-rc.17",
     "@waline/client": "^3.1.2",
-    "artalk": "^2.8.3",
+    "artalk": "2.8.3",
     "chart.js": "^4.4.1",
     "echarts": "^5.5.0",
     "flowchart.ts": "^2.0.0",

@@ -3,12 +3,12 @@ import navbar from './navbar'
 import sidebar from './sidebar'
 export default MyTheme({
   hotReload: true,
-  hostname: 'blog.tangmenghan.fun',
+  hostname: 'blog.singlequote.cn',
   themeColor: true,
   fullscreen: true,
   author: {
-    name: 'tangmenghan',
-    url: 'blog.tangmenghan.fun'
+    name: 'SingleQuote',
+    url: 'blog.SingleQuote.cn'
   },
 
   iconAssets: [
