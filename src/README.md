@@ -3,7 +3,7 @@ home: true
 layout: BlogHome
 icon: home
 title: 主页
-heroImage: /logo.svg
+heroImage: /logo.jpg
 heroText: SingleQuote's Blog
 bgImage: "/assets/home_bg3.jpg"
 heroFullScreen: true
@@ -14,7 +14,7 @@ head:
     - name: keywords
       content: SingleQuote, 笔墨痕迹, Single Blog, 博客, 个人博客, 大前端, Vue, Golang
 # projects:
-#   - icon: /logo.svg
+#   - icon: /logo.jpg
 #     name: 关于本站
 #     desc: 这里有关于站点的详细介绍
 #     link: /about
@@ -39,7 +39,7 @@ head:
   #   desc: 伙伴详细介绍
   #   link: https://你的伙伴链接
 
-  # - icon: /logo.svg
+  # - icon: /logo.jpg
   #   name: 自定义项目
   #   desc: 自定义详细介绍
   #   link: https://你的自定义链接

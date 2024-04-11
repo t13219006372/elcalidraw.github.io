@@ -1,6 +1,6 @@
 <template>
   <footer class="footer-wrapper" v-show="enable">
-    <div class="busuanzi">
+    <!-- <div class="busuanzi">
       <span id="busuanzi_container_site_pv" style="display: none">
         本站总访问量
         <span id="busuanzi_value_site_pv"></span>次
@@ -10,24 +10,12 @@
         您是本站第
         <span id="busuanzi_value_site_uv"></span>位访问者
       </span>
-    </div>
+    </div> -->
     <div class="footer-content">
       <div class="footer" v-html="content"></div>
       <div class="copyright">{{ copyright }}</div>
     </div>
     <span id="runtime_span"></span>
-    <!-- <div class="footer-link">
-      <a href="https://www.foreverblog.cn/go.html" target="_blank">
-        <img :src="wormhole" alt="" style="width: auto; height: 32px" title="穿梭虫洞-随机访问十年之约友链博客"
-      /></a>
-      <a href="https://www.travellings.cn/go.html" target="_blank">
-        <img
-          src="https://www.travellings.cn/assets/logo.gif"
-          alt=""
-          style="width: auto; height: 32px"
-          title="开往-友链接力"
-      /></a>
-    </div> -->
   </footer>
 </template>
 
@@ -37,7 +25,7 @@ import { isString } from 'vuepress/shared'
 import { computed, watch, onMounted } from 'vue'
 import { usePageAuthor, useThemeLocaleData } from '@theme-hope/composables/index'
 import { useRouter } from 'vue-router'
-import script from '../utils/busuanzi.pure'
+// import script from '../utils/busuanzi.pure'
 import { show_runtime } from '../utils/time'
 import { ref } from 'vue'
 import { useDarkmode } from '@theme-hope/modules/outlook/composables/index'
@@ -51,18 +39,18 @@ const wormhole = computed(() => {
 // 或取 当前vue-router 实例
 const router = useRouter()
 // 可以直接侦听一个 ref
-watch(router.currentRoute, async (to, from) => {
-  if (to.path != from.path) {
-    script.fetch()
-  }
-})
+// watch(router.currentRoute, async (to, from) => {
+//   if (to.path != from.path) {
+//     script.fetch()
+//   }
+// })
 onMounted(() => {
   show_runtime()
 })
 const frontmatter = usePageFrontmatter()
 const themeLocale = useThemeLocaleData()
 const author = usePageAuthor()
-console.log({ author:author.value })
+console.log({ author: author.value })
 const enable = computed(() => {
   const { copyright, footer } = frontmatter.value
   return footer !== false && Boolean(copyright || footer || themeLocale.value.displayFooter)

@@ -18,7 +18,7 @@ export default MyTheme({
     '//at.alicdn.com/t/c/font_3941380_40oya9bsklp.css'
   ],
 
-  logo: '/logo.svg',
+  logo: '/logo.jpg',
 
   repo: 'https://github.com/t13219006372',
 

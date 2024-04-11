@@ -8,9 +8,9 @@
       <template v-else>
         <FadeSlideY>
           <NormalPage :key="page.path">
-            <template #contentAfter>
+            <!-- <template #contentAfter>
               <Sponsor />
-            </template>
+            </template> -->
           </NormalPage>
         </FadeSlideY>
       </template>
@@ -32,7 +32,7 @@ import HomePage from '@theme-hope/components/HomePage'
 import NormalPage from '@theme-hope/components/NormalPage'
 import SkipLink from '@theme-hope/components/SkipLink'
 import FadeSlideY from '@theme-hope/components/transitions/FadeSlideY'
-import Sponsor from '../components/Sponsor.vue'
+// import Sponsor from '../components/Sponsor.vue'
 import { useThemeData, useThemeLocaleData, useWindowSize } from '@theme-hope/composables/index'
 declare const ENABLE_BLOG: boolean
 const themeData = useThemeData()
