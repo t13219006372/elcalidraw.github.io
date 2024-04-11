@@ -18,7 +18,6 @@ const __dirname = getDirname(import.meta.url)
 export default defineUserConfig({
   base: '/',
   lang: 'zh-CN',
-  open: true,
   head: [['meta', { name: 'referrer', content: 'no-referrer-when-downgrade' }]],
   locales: {
     '/': {
@@ -46,14 +45,6 @@ export default defineUserConfig({
             target: 'https://cn.bing.com',
             changeOrigin: true,
             rewrite: path => path.replace(/^\/bing/, '')
-          },
-          '/api': {
-            target: 'http://43.134.15.128:9081/',
-            changeOrigin: true
-          },
-          '/sidebar': {
-            target: 'http://43.134.15.128:9081/',
-            changeOrigin: true
           }
         }
       }
