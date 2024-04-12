@@ -3,34 +3,15 @@ import { navbar } from 'vuepress-theme-hope'
 export default navbar([
   '/',
   { text: 'leetcode每日一题', icon: 'discover', link: '/leetcode/' },
-  // {
-  //   text: '笔记分类',
-  //   icon: 'edit',
-  //   children: [
-  //     {
-  //       text: '代码笔记',
-  //       prefix: '/posts/',
-  //       children: [
-  //         { text: 'iOS笔记', icon: 'hk-apple', link: 'iOS/' },
-  //         { text: '前端笔记', icon: 'code', link: 'Web/' },
-  //         { text: 'Linux', icon: 'linux', link: 'Linux/' },
-  //         { text: 'Python', icon: 'python', link: 'Python/' },
-  //         { text: 'Rust', icon: 'hk-rust', link: 'Rust/' },
-  //         { text: 'React', icon: 'react', link: 'cross-platform/ReactNative/' },
-  //         {
-  //           text: 'Flutter',
-  //           icon: 'hk-flutter',
-  //           link: 'cross-platform/Flutter/'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       text: '博客相关',
-  //       prefix: '/blog/',
-  //       children: [{ text: '博客相关', icon: 'blog', link: '' }]
-  //     }
-  //   ]
-  // },
+  {
+    text: '服务器',
+    icon: 'server',
+    prefix: 'server/',
+    children: [
+      { text: 'golang', icon: 'golang', link: 'golang/' },
+      { text: 'docker', icon: 'docker', link: 'docker/' }
+    ]
+  }
   // {
   //   text: '软件教程',
   //   icon: 'software',

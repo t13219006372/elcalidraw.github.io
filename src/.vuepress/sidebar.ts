@@ -9,21 +9,14 @@ export default sidebar({
       prefix: 'leetcode/',
       link: 'leetcode/',
       children: 'structure'
+    },
+    {
+      text: '服务器',
+      prefix: 'server/',
+      icon: 'server',
+      link: 'server/',
+      children: [{ text: 'docker', prefix: 'docker/', icon: 'docker', link: 'docker/' }]
     }
-    // {
-    //   text: '代码笔记',
-    //   icon: 'note',
-    //   prefix: 'posts/',
-    //   // collapsible: true,
-    //   children: [
-    //     {
-    //       text: 'Rust',
-    //       icon: 'hk-rust',
-    //       prefix: 'Rust/',
-    //       link: 'Rust/'
-    //     }
-    //   ]
-    // },
     // {
     //   text: '软件/工具教程',
     //   icon: 'software',
@@ -36,6 +29,6 @@ export default sidebar({
     //   prefix: 'private/',
     //   children: 'structure'
     // }
-  ]
-  // '/posts/Linux/': 'structure',
+  ],
+  '/server/docker/': 'structure',
 })
