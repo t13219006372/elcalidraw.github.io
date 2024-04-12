@@ -1,5 +1,5 @@
 ---
-title: 'Docker容器仓库使用'
+title: 'Docker容器镜像仓库使用'
 icon: 'store'
 date: 2024-04-12
 index: false

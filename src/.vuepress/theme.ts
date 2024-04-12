@@ -16,7 +16,7 @@ export default MyTheme({
     '//at.alicdn.com/t/c/font_2410206_5vb9zlyghj.css',
     // 自己的
     '//at.alicdn.com/t/c/font_3941380_40oya9bsklp.css',
-    '//at.alicdn.com/t/c/font_4505103_yrn03evqbyd.css'
+    '//at.alicdn.com/t/c/font_4505103_diil9f4nfip.css'
   ],
 
   logo: '/logo.jpg',
