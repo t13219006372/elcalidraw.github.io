@@ -65,6 +65,9 @@ order: 2
 > -q，--quiet：不输出 docker pull 信息
 > -t，--tty：分配一个伪终端
 > -v，--volume list：绑定挂载卷-v ./usr/local/nginx/conf/:/etc/nginx/conf/
+> -m, --memory bytes 设置内存限制。（可以使用 M 为单位）
+> --memory-swap bytes: 设置交换内存，默认等于 `--memory`。（可以使用 M 为单位）
+> -c, --cpu-shares int: 设置容器cpu使用权重
 
 ### 停止运行中的容器
 
