@@ -16,6 +16,16 @@ export default sidebar({
       icon: 'server',
       link: 'server/',
       children: [{ text: 'docker', prefix: 'docker/', icon: 'docker', link: 'docker/' }]
+    },
+    {
+      text: '前端',
+      prefix: 'frontend/',
+      icon: 'frontend',
+      link: 'frontend/',
+      children: [
+        { text: 'Vue', prefix: 'vue/', icon: 'vue', link: 'vue/' },
+        { text: '杂文', prefix: 'others/', icon: 'article', link: 'others/' }
+      ]
     }
     // {
     //   text: '软件/工具教程',
@@ -31,4 +41,6 @@ export default sidebar({
     // }
   ],
   '/server/docker/': 'structure',
+  '/frontend/vue/': 'structure',
+  '/frontend/others/': 'structure'
 })

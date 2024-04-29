@@ -8,8 +8,17 @@ export default navbar([
     icon: 'server',
     prefix: 'server/',
     children: [
-      { text: 'golang', icon: 'golang', link: 'golang/' },
+      // { text: 'golang', icon: 'golang', link: 'golang/' },
       { text: 'docker', icon: 'docker', link: 'docker/' }
+    ]
+  },
+  {
+    text: '前端',
+    icon: 'frontend',
+    prefix: 'frontend/',
+    children: [
+      // { text: 'Vue', icon: 'vue', link: 'vue/' },
+      { text: '杂文', icon: 'article', link: 'others/' }
     ]
   }
   // {
