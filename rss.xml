@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="https://blog.singlequote.cn/rss.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <atom:link href="https://blog.singlequote.cn/rss.xml" rel="self" type="application/rss+xml"/>
+    <title>SingleQuote&amp;apos;s Blog</title>
+    <link>https://blog.singlequote.cn/</link>
+    <description>笔墨痕迹的博客</description>
+    <language>zh-CN</language>
+    <pubDate>Wed, 05 Feb 2025 10:12:30 GMT</pubDate>
+    <lastBuildDate>Wed, 05 Feb 2025 10:12:30 GMT</lastBuildDate>
+    <generator>@vuepress/plugin-feed</generator>
+    <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+    <category>浏览器</category>
+    <category>算法</category>
+    <category>Docker</category>
+    <item>
+      <title>跨域技术</title>
+      <link>https://blog.singlequote.cn/frontend/others/%E8%B7%A8%E5%9F%9F%E6%8A%80%E6%9C%AF.html</link>
+      <guid>https://blog.singlequote.cn/frontend/others/%E8%B7%A8%E5%9F%9F%E6%8A%80%E6%9C%AF.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">跨域技术</source>
+      <description>跨域技术, 浏览器跨域机制,同源策略,cors,jsonp</description>
+      <category>浏览器</category>
+      <pubDate>Mon, 29 Apr 2024 00:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>什么是同源</h2>
+<p>如果两个地址具有相同的 <strong>协议、域名、端口号</strong>，我们认为他们具有相同的源</p>
+<h2>什么是浏览器同源策略</h2>
+<p>同源策略是浏览器的一个安全限制，它阻止了 <strong>不同域</strong> 之间进行数据交互。</p>
+<h3>同源策略阻止了哪些数据交互</h3>
+<ol>
+<li>服务读取非同源策略下的 <code>cookie</code>、<code>storage</code></li>
+<li>无法解除非同源的 dom</li>
+<li><strong>无法向非同源地址发送 ajax 请求</strong></li>
+</ol>
+<h2>什么是跨域</h2>
+<p>违反同源策略，向不同源发送 ajax 请求的行为称之为跨域。<br>
+在正常情况下，<strong>浏览器会阻止跨域行为并且抛出错误</strong>。</p>
+<h2>解决跨域问题</h2>
+<p>使用一定方案成功向非同源地址发送 ajax 请求</p>
+<h3>jsonp 技术解决跨域</h3>
+<p>jsonp 利用了 <code>&lt;script&gt;</code> 标签 <strong>不受同源策略限制</strong> 的特性实现跨域。</p>
+<h4>实现</h4>
+<p>需要前后端共同配合完成：<br>
+前端 -- 预先定义一个全局的 callback 函数，并将函数名通过 <code>script</code>标签发送给后端。</p>
+<div class="language-javascript line-numbers-mode" data-ext="js" data-title="js"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E5C07B">window</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">callback</span><span style="color:#56B6C2"> =</span><span style="color:#C678DD"> function</span><span style="color:#ABB2BF"> (</span><span style="color:#E06C75;font-style:italic">data</span><span style="color:#ABB2BF">) {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">  // 成功获取数据</span></span>
+<span class="line"><span style="color:#ABB2BF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">// 创建script标签发送请求</span></span>
+<span class="line"><span style="color:#C678DD">const</span><span style="color:#E5C07B"> scriptEl</span><span style="color:#56B6C2"> =</span><span style="color:#E5C07B"> document</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">createElement</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'script'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E5C07B">scriptEl</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">src</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> 'http://localhost:10086/jsonp?callback=callback'</span><span style="color:#7F848E;font-style:italic"> // 将回调函数名发送给后端</span></span>
+<span class="line"><span style="color:#E5C07B">scriptEl</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">onload</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> () </span><span style="color:#C678DD">=&gt;</span><span style="color:#E5C07B"> document</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">body</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">removeChild</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">scriptEl</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E5C07B">document</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">body</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">appendChild</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">scriptEl</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>后端 -- 拿到 callback 函数名，拼接一个函数调用，并将需要返回的数据以参数的形式传入。</p>
+<div class="language-javascript line-numbers-mode" data-ext="js" data-title="js"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">const</span><span style="color:#E5C07B"> http</span><span style="color:#56B6C2"> =</span><span style="color:#61AFEF"> require</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'http'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75">http</span></span>
+<span class="line"><span style="color:#ABB2BF">  .</span><span style="color:#61AFEF">createServer</span><span style="color:#ABB2BF">((</span><span style="color:#E06C75;font-style:italic">req</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75;font-style:italic">res</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">=&gt;</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">    const</span><span style="color:#E5C07B"> url</span><span style="color:#56B6C2"> =</span><span style="color:#C678DD"> new</span><span style="color:#61AFEF"> URL</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">req</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">url</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">`http://</span><span style="color:#C678DD">${</span><span style="color:#E5C07B">req</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">headers</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">host</span><span style="color:#C678DD">}</span><span style="color:#98C379">`</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">    const</span><span style="color:#E5C07B"> callback</span><span style="color:#56B6C2"> =</span><span style="color:#E5C07B"> url</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">searchParams</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">get</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'callback'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">    const</span><span style="color:#E5C07B"> path</span><span style="color:#56B6C2"> =</span><span style="color:#E5C07B"> url</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">pathname</span></span>
+<span class="line"><span style="color:#E5C07B">    console</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">log</span><span style="color:#ABB2BF">({ </span><span style="color:#E06C75">path</span><span style="color:#ABB2BF"> })</span></span>
+<span class="line"><span style="color:#C678DD">    if</span><span style="color:#ABB2BF"> (</span><span style="color:#E06C75">path</span><span style="color:#56B6C2"> ===</span><span style="color:#98C379"> '/jsonp'</span><span style="color:#ABB2BF">) {</span></span>
+<span class="line"><span style="color:#C678DD">      const</span><span style="color:#E5C07B"> data</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> { </span><span style="color:#E06C75">code</span><span style="color:#ABB2BF">: </span><span style="color:#D19A66">200</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">message</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">'get data success'</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">data</span><span style="color:#ABB2BF">: [</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">2</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">3</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">4</span><span style="color:#ABB2BF">] }</span></span>
+<span class="line"><span style="color:#E5C07B">      res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">end</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">`</span><span style="color:#C678DD">${</span><span style="color:#E06C75">callback</span><span style="color:#C678DD">}</span><span style="color:#98C379">(</span><span style="color:#C678DD">${</span><span style="color:#E5C07B">JSON</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">stringify</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">data</span><span style="color:#ABB2BF">)</span><span style="color:#C678DD">}</span><span style="color:#98C379">)`</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">      return</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">end</span><span style="color:#ABB2BF">()</span></span>
+<span class="line"><span style="color:#ABB2BF">  })</span></span>
+<span class="line"><span style="color:#ABB2BF">  .</span><span style="color:#61AFEF">listen</span><span style="color:#ABB2BF">(</span><span style="color:#D19A66">10086</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>cors 跨域</h3>
+<h4>什么是 cors</h4>
+<p>cors 跨域资源共享策略，是 w3c 的一个标准，运行 XMLHttpRuest 请求向 <strong>非同源</strong> 地址发起请求，完成跨域。</p>
+<h4>浏览器对请求的处理</h4>
+<p>浏览器将请求分为了<strong>简单请求和非简单请求</strong></p>
+<ol>
+<li>简单请求 -- 同时满足以下两个条件
+<ol>
+<li>请求方法是以下三种：
+<ol>
+<li>HEAD</li>
+<li>GET</li>
+<li>POST</li>
+</ol>
+</li>
+<li>HTTP 请求头信息不超出以下几种字段
+<ol>
+<li>Accept</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+<li>Last-Event-ID</li>
+<li>Content-Type：只限于三个值 application/x-www-form-urlencoded、multipart/form-data、text/plain</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>非简单请求 -- 不同时满足以上两种条件</li>
+</ol>
+<p>浏览器对两种请求的处理是不一样的</p>
+<h5>简单请求</h5>
+<p>为请求头添加 <strong>Origin</strong> 字段，若和响应头中 Access-Control-Allow-Origin 字段一致，则允许访问</p>
+<h5>非简单请求</h5>
+<p>在发送非简单请求之前会发送一个 <strong>预请求</strong>，请求方法为 <strong>OPTIONS</strong>。此请求会根据造成非简单请求的原因添加不同的请求头，和响应头对比，看是否允许访问，若不允许则报错</p>
+<div class="language-json line-numbers-mode" data-ext="json" data-title="json"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">{</span></span>
+<span class="line"><span style="color:#E06C75">  "Access-Control-Request-Method"</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">"PUT"</span><span style="color:#ABB2BF">, </span><span style="color:#7F848E;font-style:italic">// 由于 请求方法 造成非简单请求则添加</span></span>
+<span class="line"><span style="color:#E06C75">  "Access-Control-Request-Headers"</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">"X-Access-token"</span><span style="color:#7F848E;font-style:italic"> // 由于请求头造成</span></span>
+<span class="line"><span style="color:#ABB2BF">}</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>实现</h4>
+<p>需要后端设置允许跨域资源共享策略的源，方法，请求头，cookie 等</p>
+<div class="language-javascript line-numbers-mode" data-ext="js" data-title="js"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">const</span><span style="color:#E5C07B"> http</span><span style="color:#56B6C2"> =</span><span style="color:#61AFEF"> require</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'http'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75">http</span></span>
+<span class="line"><span style="color:#ABB2BF">  .</span><span style="color:#61AFEF">createServer</span><span style="color:#ABB2BF">((</span><span style="color:#E06C75;font-style:italic">req</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75;font-style:italic">res</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">=&gt;</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 允许非简单请求的请求方法为 PUT</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">setHeader</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'Access-Control-Allow-Methods'</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">'PUT'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 允许请求的源为 http://localhost:8080</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">setHeader</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'Access-Control-Allow-Origin'</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">'http://localhost:8080'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 允许请求时携带的非基本请求头为 aaa、bbb</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">setHeader</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'Access-Control-Allow-Headers'</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">'aaa,bbb'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 在预请求成功之后多久不会再发送预请求</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">setHeader</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'Access-Control-Max-Age'</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">'1728000'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 允许浏览器携带cookie跨域</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">setHeader</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'Access-Control-Allow-Credentials'</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">'true'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E5C07B">    res</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">end</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'OK'</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#ABB2BF">  })</span></span>
+<span class="line"><span style="color:#ABB2BF">  .</span><span style="color:#61AFEF">listen</span><span style="color:#ABB2BF">(</span><span style="color:#D19A66">10086</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>代理服务器实现跨域</h3>
+<h4>原理</h4>
+<p>只有浏览器向服务器之间发送请求才会有同源策略的限制，<strong>服务器向服务器之间发送请求是没有限制的</strong>。因此，只要向本地服务器发送请求，并由本地服务器转发到目标服务器，即可解决跨域问题。</p>
+<figure><figcaption>代理服务器实现跨域</figcaption></figure>
+<h4>实现</h4>
+<p>以 webpack 的 webpack-dev-server 为例<br>
+<strong>webpack.config.js</strong></p>
+<div class="language-javascript line-numbers-mode" data-ext="js" data-title="js"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">// ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E5C07B">module</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">exports</span><span style="color:#56B6C2"> =</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">  // ...</span></span>
+<span class="line"><span style="color:#E06C75">  devServer</span><span style="color:#ABB2BF">: {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // ...</span></span>
+<span class="line"><span style="color:#E06C75">    port</span><span style="color:#ABB2BF">: </span><span style="color:#D19A66">8080</span><span style="color:#ABB2BF">, </span><span style="color:#7F848E;font-style:italic">// 服务器运行在本地的8080端口</span></span>
+<span class="line"><span style="color:#E06C75">    proxy</span><span style="color:#ABB2BF">: {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 将本地请求中带 /api/ 的请求代理到 http://localhost:1123</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 示例：http://localhost:8080/api/test -&gt; http://localhost:1123/api/test</span></span>
+<span class="line"><span style="color:#98C379">      '/api/'</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">'http://localhost:1123'</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"><span style="color:#ABB2BF">}</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>index.html</strong></p>
+<div class="language-html line-numbers-mode" data-ext="html" data-title="html"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;!</span><span style="color:#E06C75">DOCTYPE</span><span style="color:#D19A66"> html</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">html</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF">  &lt;</span><span style="color:#E06C75">body</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">button</span><span style="color:#D19A66"> onclick</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"</span><span style="color:#61AFEF">senRequest</span><span style="color:#98C379">()"</span><span style="color:#ABB2BF">&gt;Click Me&lt;/</span><span style="color:#E06C75">button</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF">  &lt;/</span><span style="color:#E06C75">body</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">html</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">script</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"><span style="color:#C678DD">  function</span><span style="color:#61AFEF"> sendRequest</span><span style="color:#ABB2BF">() {</span></span>
+<span class="line"><span style="color:#61AFEF">    fetch</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">'/api/test'</span><span style="color:#ABB2BF">).</span><span style="color:#61AFEF">then</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75;font-style:italic">res</span><span style="color:#C678DD"> =&gt;</span><span style="color:#E5C07B"> console</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">log</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">res</span><span style="color:#ABB2BF">))</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">script</span><span style="color:#ABB2BF">&gt;</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>]]></content:encoded>
+      <enclosure url="https://w.wallhaven.cc/full/ex/wallhaven-ex11z8.jpg" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>O(1) 时间插入、删除和获取随机元素</title>
+      <link>https://blog.singlequote.cn/leetcode/O(1)%20%E6%97%B6%E9%97%B4%E6%8F%92%E5%85%A5%E3%80%81%E5%88%A0%E9%99%A4%E5%92%8C%E8%8E%B7%E5%8F%96%E9%9A%8F%E6%9C%BA%E5%85%83%E7%B4%A0.html</link>
+      <guid>https://blog.singlequote.cn/leetcode/O(1)%20%E6%97%B6%E9%97%B4%E6%8F%92%E5%85%A5%E3%80%81%E5%88%A0%E9%99%A4%E5%92%8C%E8%8E%B7%E5%8F%96%E9%9A%8F%E6%9C%BA%E5%85%83%E7%B4%A0.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">O(1) 时间插入、删除和获取随机元素</source>
+      <description>算法，数组，O(1) 时间插入、删除和获取随机元素，golang</description>
+      <category>算法</category>
+      <pubDate>Mon, 29 Apr 2024 00:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>题目</h2>
+<p>实现 <code>RandomizedSet</code> 类：</p>
+<ul>
+<li><code>RandomizedSet()</code> 初始化 <code>RandomizedSet</code> 对象</li>
+<li><code>bool insert(int val)</code> 当元素 <code>val</code> 不存在时，向集合中插入该项，并返回 <code>true</code> ；否则，返回 <code>false</code> 。</li>
+<li><code>bool remove(int val)</code> 当元素 <code>val</code> 存在时，从集合中移除该项，并返回 <code>true</code> ；否则，返回 <code>false</code> 。</li>
+<li><code>int getRandom()</code> 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。</li>
+</ul>
+<p>你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 <code>O(1)</code> 。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>输入</strong> &gt; ["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"] &gt; [[], [1], [2], [2], [], [1], [2], []]</p>
+<p><strong>输出</strong> &gt; [null, true, false, true, 2, true, false, 2]</p>
+<p><strong>解释</strong><br>
+RandomizedSet randomizedSet = new RandomizedSet();<br>
+randomizedSet.insert(1); // 向集合中插入 1 。返回 true 表示 1 被成功地插入。<br>
+randomizedSet.remove(2); // 返回 false ，表示集合中不存在 2 。<br>
+randomizedSet.insert(2); // 向集合中插入 2 。返回 true 。集合现在包含 [1,2] 。<br>
+randomizedSet.getRandom(); // getRandom 应随机返回 1 或 2 。<br>
+randomizedSet.remove(1); // 从集合中移除 1 ，返回 true 。集合现在包含 [2] 。<br>
+randomizedSet.insert(2); // 2 已在集合中，所以返回 false 。<br>
+randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom 总是返回 2 。</p>
+</blockquote>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>-2^31^ &lt;= val &lt;= 2^31^ - 1</code></li>
+<li>最多调用 <code>insert</code>、<code>remove</code> 和 <code>getRandom</code> 函数 <code>2 * 105</code> 次</li>
+<li>在调用 <code>getRandom</code> 方法时，数据结构中 <em>至少存在一个</em> 元素。</li>
+</ul>
+<h2>解法</h2>
+<h3>1. 哈希表加可变数组</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<ul>
+<li>由于题目中涉及到集合中数组的查询，并且查询的时间复杂度需要为 <code>O(1)</code>, 此时可以选择采用哈希表，将查询的数字作为哈希表的 key。</li>
+<li>由于还需要随机获取集合中的数，所有需要额外顶一个数组来保存集合中的数。（如果单纯用哈希表保存，再随机的时候需要循环才能获取到哈希表中的所有数，时间复杂度就不为 <code>O(1)</code> 了）</li>
+<li>在删除数组中的元素时需要根据值查元素的 <code>index</code>, 所以哈希表的值应该为这个数在数组中对应的下标</li>
+</ul>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  package</span><span style="color:#E5C07B"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  import</span><span style="color:#ABB2BF"> (</span></span>
+<span class="line"><span style="color:#98C379">  	"math/rand"</span></span>
+<span class="line"><span style="color:#ABB2BF">  )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  type</span><span style="color:#E5C07B"> RandomizedSet</span><span style="color:#C678DD"> struct</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 保存数和这个数在数组中下标的map</span></span>
+<span class="line"><span style="color:#E06C75">  	idx</span><span style="color:#C678DD"> map</span><span style="color:#ABB2BF">[</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">]</span><span style="color:#C678DD">int</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 包这些数的集合</span></span>
+<span class="line"><span style="color:#E06C75">  	val</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">  // 返回实列</span></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> Constructor</span><span style="color:#ABB2BF">() </span><span style="color:#E06C75">RandomizedSet</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  	return</span><span style="color:#E5C07B"> RandomizedSet</span><span style="color:#ABB2BF">{</span><span style="color:#C678DD">map</span><span style="color:#ABB2BF">[</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">]</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">{}, []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">{}}</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#ABB2BF"> (</span><span style="color:#E06C75">this</span><span style="color:#C678DD"> *</span><span style="color:#E06C75">RandomizedSet</span><span style="color:#ABB2BF">) </span><span style="color:#61AFEF">Insert</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">val</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">bool</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 查询哈希表中是否存在这个数</span></span>
+<span class="line"><span style="color:#C678DD">  	if</span><span style="color:#E06C75"> _</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">ok</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">idx</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">]; </span><span style="color:#56B6C2">!</span><span style="color:#E06C75">ok</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 不存在则向集合中添加这个数</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#E5C07B"> =</span><span style="color:#61AFEF"> append</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 并记录这个数对应集合的下标</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">idx</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">] </span><span style="color:#E5C07B">=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">-</span><span style="color:#D19A66"> 1</span></span>
+<span class="line"><span style="color:#C678DD">  		return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">  	}</span></span>
+<span class="line"><span style="color:#C678DD">  	return</span><span style="color:#D19A66"> false</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#ABB2BF"> (</span><span style="color:#E06C75">this</span><span style="color:#C678DD"> *</span><span style="color:#E06C75">RandomizedSet</span><span style="color:#ABB2BF">) </span><span style="color:#61AFEF">Remove</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">val</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">bool</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 查询哈希表中是否存在这个数</span></span>
+<span class="line"><span style="color:#C678DD">  	if</span><span style="color:#E06C75"> index</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">ok</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">idx</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">]; </span><span style="color:#E06C75">ok</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 若存在，则交换这个数和最后一个数（避免删除中间元素导致哈希表中记录的索引发生变化）</span></span>
+<span class="line"><span style="color:#E06C75">  		temp</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[</span><span style="color:#61AFEF">len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">)</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">]</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[</span><span style="color:#61AFEF">len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">)</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">] </span><span style="color:#E5C07B">=</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">]</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">] </span><span style="color:#E5C07B">=</span><span style="color:#E06C75"> temp</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 并修改哈希表中对应索引</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">idx</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">temp</span><span style="color:#ABB2BF">] </span><span style="color:#E5C07B">=</span><span style="color:#E06C75"> index</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 删除集合中的数以及哈希表中的索引</span></span>
+<span class="line"><span style="color:#E06C75">  		this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#E5C07B"> =</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[:</span><span style="color:#61AFEF">len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">)</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">]</span></span>
+<span class="line"><span style="color:#61AFEF">  		delete</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">idx</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">  		return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">  	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  	return</span><span style="color:#D19A66"> false</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#ABB2BF"> (</span><span style="color:#E06C75">this</span><span style="color:#C678DD"> *</span><span style="color:#E06C75">RandomizedSet</span><span style="color:#ABB2BF">) </span><span style="color:#61AFEF">GetRandom</span><span style="color:#ABB2BF">() </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 随机获取一个下标，并返回对应下标的值</span></span>
+<span class="line"><span style="color:#C678DD">  	return</span><span style="color:#E06C75"> this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">rand</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Intn</span><span style="color:#ABB2BF">(</span><span style="color:#61AFEF">len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">this</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">val</span><span style="color:#ABB2BF">))]</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>哈希表加可变数组测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(1)</strong>：因为无论数组的大小如何，获取随机元素的操作都只需要常数时间，所以时间复杂度为<strong>O(1)</strong></p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(n)</strong>: 因为函数中使用的数据结构包括一个哈希表和一个数组，这两个数据结构的大小都与输入的数据的数量成正比。在最坏的情况下，所有的数据都需要被存储进哈希表和数组中，因此空间复杂度为 <strong>O(n)</strong>。</p>
+</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Dockerfile实战</title>
+      <link>https://blog.singlequote.cn/server/docker/dockerfile-instance.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/dockerfile-instance.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">Dockerfile实战</source>
+      <description>Docker,docker，容器，服务器，Dockerfile实战</description>
+      <category>Docker</category>
+      <pubDate>Tue, 23 Apr 2024 10:52:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>将项目代码打包成 docker 镜像</h2>
+<h3>目录结构</h3>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  hello-gin</span></span>
+<span class="line"><span style="color:#ABB2BF">  |</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> Dockerfile</span></span>
+<span class="line"><span style="color:#ABB2BF">  |</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> main.go</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>项目源代码</h3>
+<p><code>main.go</code> 代码如下:</p>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">    package</span><span style="color:#E5C07B"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">    import</span><span style="color:#ABB2BF"> (</span></span>
+<span class="line"><span style="color:#98C379">    	"fmt"</span></span>
+<span class="line"><span style="color:#98C379">    	"github.com/gin-gonic/gin"</span></span>
+<span class="line"><span style="color:#98C379">    	"net/http"</span></span>
+<span class="line"><span style="color:#ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">    func</span><span style="color:#61AFEF"> main</span><span style="color:#ABB2BF">() {</span></span>
+<span class="line"><span style="color:#E06C75">    	app</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> gin</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">New</span><span style="color:#ABB2BF">()</span></span>
+<span class="line"><span style="color:#E06C75">    	app</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">GET</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"/"</span><span style="color:#ABB2BF">, </span><span style="color:#C678DD">func</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75;font-style:italic">context</span><span style="color:#C678DD"> *</span><span style="color:#E5C07B">gin</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">Context</span><span style="color:#ABB2BF">) {</span></span>
+<span class="line"><span style="color:#E06C75">    		fmt</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Println</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"hello gin"</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E06C75">    		context</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">JSON</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">http</span><span style="color:#ABB2BF">.</span><span style="color:#E06C75">StatusOK</span><span style="color:#ABB2BF">, </span><span style="color:#98C379">"hello gin"</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#ABB2BF">    	})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">    	if</span><span style="color:#E06C75"> err</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> app</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Run</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">":8080"</span><span style="color:#ABB2BF">); </span><span style="color:#E06C75">err</span><span style="color:#56B6C2"> !=</span><span style="color:#D19A66"> nil</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#61AFEF">    		panic</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">err</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#ABB2BF">    	}</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>书写 Dockerfile 文件</h3>
+<div class="language-docker line-numbers-mode" data-ext="docker" data-title="docker"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">    # 设置基层镜像(golang环境镜像)</span></span>
+<span class="line"><span style="color:#61AFEF">    FROM</span><span style="color:#ABB2BF"> golang:1.16</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    # 将main.go 添加到镜像的/app/目录</span></span>
+<span class="line"><span style="color:#61AFEF">    ADD</span><span style="color:#ABB2BF"> main.go /app/</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    # 设置工作目录为镜像的/app/目录</span></span>
+<span class="line"><span style="color:#61AFEF">    WORKDIR</span><span style="color:#ABB2BF"> /app/</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    # 初始化go mod 并且安装 gin依赖</span></span>
+<span class="line"><span style="color:#61AFEF">    RUN</span><span style="color:#ABB2BF"> go mod init hello-gin &amp;&amp; go get -u github.com/gin-gonic/gin@v1.7.7</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    # 运行入口文件main.go</span></span>
+<span class="line"><span style="color:#61AFEF">    CMD</span><span style="color:#ABB2BF"> go run main.go</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    # 标记容器正在监听8080/tcp端口</span></span>
+<span class="line"><span style="color:#61AFEF">    EXPOSE</span><span style="color:#ABB2BF"> 8080/tcp</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>运行<code>go build</code>指令构建镜像</h3>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  go</span><span style="color:#98C379"> build</span><span style="color:#D19A66"> -t</span><span style="color:#98C379"> hello-gin</span><span style="color:#98C379"> .</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>其中 <code>.</code> 指定构建上下文为当前目录</p>
+<h3>查看生成镜像</h3>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  docker</span><span style="color:#98C379"> images</span></span>
+<span class="line"><span style="color:#61AFEF">  REPOSITORY</span><span style="color:#98C379">                      TAG</span><span style="color:#98C379">       IMAGE</span><span style="color:#98C379"> ID</span><span style="color:#98C379">       CREATED</span><span style="color:#98C379">          SIZE</span></span>
+<span class="line"><span style="color:#61AFEF">  hello-gin</span><span style="color:#98C379">                        latest</span><span style="color:#98C379">    3f94931ad361</span><span style="color:#D19A66">   20</span><span style="color:#98C379"> minutes</span><span style="color:#98C379"> ago</span><span style="color:#98C379">   1GB</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>运行容器查看镜像是否制作成功</h3>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  docker</span><span style="color:#98C379"> run</span><span style="color:#D19A66"> -itd</span><span style="color:#D19A66"> --name</span><span style="color:#98C379"> hello-gin</span><span style="color:#D19A66"> -p</span><span style="color:#98C379"> 8080:8080</span><span style="color:#98C379"> hello-gin</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  docker</span><span style="color:#98C379"> logs</span><span style="color:#D19A66"> -f</span><span style="color:#98C379"> hello-gin</span></span>
+<span class="line"><span style="color:#61AFEF">  -</span><span style="color:#98C379"> using</span><span style="color:#98C379"> env:</span><span style="color:#98C379">   export</span><span style="color:#98C379"> GIN_MODE=release</span></span>
+<span class="line"><span style="color:#61AFEF">  -</span><span style="color:#98C379"> using</span><span style="color:#98C379"> code:</span><span style="color:#98C379">  gin.SetMode</span><span style="color:#ABB2BF">(</span><span style="color:#61AFEF">gin.ReleaseMode</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">  [GIN-debug] </span><span style="color:#61AFEF">GET</span><span style="color:#98C379">    /</span><span style="color:#D19A66">                         --</span><span style="color:#ABB2BF">&gt;</span><span style="color:#98C379"> main.main.func1</span><span style="color:#ABB2BF"> (1 </span><span style="color:#98C379">handlers</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#ABB2BF">  [GIN-debug] [WARNING] </span><span style="color:#61AFEF">You</span><span style="color:#98C379"> trusted</span><span style="color:#98C379"> all</span><span style="color:#98C379"> proxies,</span><span style="color:#98C379"> this</span><span style="color:#98C379"> is</span><span style="color:#98C379"> NOT</span><span style="color:#98C379"> safe.</span><span style="color:#98C379"> We</span><span style="color:#98C379"> recommend</span><span style="color:#98C379"> you</span><span style="color:#98C379"> to</span><span style="color:#98C379"> set</span><span style="color:#98C379"> a</span><span style="color:#98C379"> value.</span></span>
+<span class="line"><span style="color:#61AFEF">  Please</span><span style="color:#98C379"> check</span><span style="color:#98C379"> https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies</span><span style="color:#98C379"> for</span><span style="color:#98C379"> details.</span></span>
+<span class="line"><span style="color:#ABB2BF">  [GIN-debug] </span><span style="color:#61AFEF">Listening</span><span style="color:#98C379"> and</span><span style="color:#98C379"> serving</span><span style="color:#98C379"> HTTP</span><span style="color:#98C379"> on</span><span style="color:#98C379"> :8080</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>访问服务器8080端口，服务器控制台打印 hello gin , 并且会返回 “hello gin”。</p>
+]]></content:encoded>
+      <enclosure url="https://w.wallhaven.cc/full/d6/wallhaven-d6qj2l.jpg" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>h指数</title>
+      <link>https://blog.singlequote.cn/leetcode/h%E6%8C%87%E6%95%B0.html</link>
+      <guid>https://blog.singlequote.cn/leetcode/h%E6%8C%87%E6%95%B0.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">h指数</source>
+      <description>算法，数组，h指数，golang</description>
+      <category>算法</category>
+      <pubDate>Mon, 15 Apr 2024 00:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>题目</h2>
+<p>给你一个整数数组 <code>citations</code> ，其中 <code>citations[i]</code> 表示研究者的第 <code>i</code> 篇论文被引用的次数。计算并返回该研究者的 <code>h</code> 指数。</p>
+<p>根据维基百科上 <a href="https://baike.baidu.com/item/H%E6%8C%87%E6%95%B0/9951340?fromtitle=h-index&amp;fromid=3991452" target="_blank" rel="noopener noreferrer">h 指数的定义</a>：<code>h</code> 代表“高引用次数” ，一名科研人员的 <code>h</code> <strong>指数</strong> 是指他（她）至少发表了 <code>h</code> 篇论文，并且 <strong>至少</strong> 有 <code>h</code> 篇论文被引用次数大于等于 <code>h</code> 。如果 <code>h</code> 有多种可能的值，<code>h</code> 指数 是其中最大的那个。</p>
+<p><strong>示例 1：</strong></p>
+<blockquote>
+<p><strong>输入</strong>：citations = [3,0,6,1,5] &gt; <strong>输出</strong>：3<br>
+<strong>解释</strong>：给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 3, 0, 6, 1, 5 次。<br>
+由于研究者有 3 篇论文每篇 至少 被引用了 3 次，其余两篇论文每篇被引用 不多于 3 次，所以她的 h 指数是 3。</p>
+</blockquote>
+<p><strong>示例 2：</strong></p>
+<blockquote>
+<p><strong>输入</strong>：citations = [1,3,1] &gt; <strong>输出</strong>：1</p>
+</blockquote>
+<p><strong>提示</strong></p>
+<ul>
+<li><code>n == citations.length</code></li>
+<li><code>1&lt;=n&lt;=5000</code></li>
+<li><code>0&lt;= citations[i] &lt;= 1000</code></li>
+</ul>
+<h2>解法</h2>
+<h3>1. 暴力枚举</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>由于一共有 n 篇文章，所以 h 指数最多是 n，我们可以循环遍历，假设 h 指数为 i，然后内循环去验证 h 指数为 i 是否成立即可。</p>
+<p><strong>例如</strong><br>
+citations = [3,0,6,1,5]<br>
+一共五篇文章，循环五次。<br>
+第一次假设 h 指数为 1，内循环判断，引用大于 1 的文章有 3 篇。不满足<strong>有 1 篇文章至少引用 1 次，其他文章小于等于 1 次</strong>。<br>
+第二次假设 h 指数为 2，内循环判断，引用大于 2 的文章有 3 篇。不满足<strong>有 2 篇文章至少引用 2 次，其他文章小于等于 2 次</strong>。<br>
+第二次假设 h 指数为 3，内循环判断，引用大于 3 的文章有 2 篇。引用等于 3 的文章有 1 篇，满足<strong>有 3 篇文章至少引用 3 次，其他文章小于等于 3 次</strong>。</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> hIndex</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">citations</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  for</span><span style="color:#E06C75"> index</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">_</span><span style="color:#E5C07B"> :=</span><span style="color:#C678DD"> range</span><span style="color:#E06C75"> citations</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 假设指数为i</span></span>
+<span class="line"><span style="color:#E06C75">	  	i</span><span style="color:#E5C07B"> :=</span><span style="color:#E06C75"> index</span><span style="color:#C678DD"> +</span><span style="color:#D19A66"> 1</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 记录引用大于指数的文章篇数</span></span>
+<span class="line"><span style="color:#E06C75">	  	count</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 记录引用等于指数的文章篇数</span></span>
+<span class="line"><span style="color:#E06C75">      temp</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 内循环记录文章出现次数</span></span>
+<span class="line"><span style="color:#C678DD">	  	for</span><span style="color:#E06C75"> _</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">val</span><span style="color:#E5C07B"> :=</span><span style="color:#C678DD"> range</span><span style="color:#E06C75"> citations</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  		if</span><span style="color:#E06C75"> val</span><span style="color:#56B6C2"> &gt;</span><span style="color:#E06C75"> i</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">	  			count</span><span style="color:#56B6C2">++</span></span>
+<span class="line"><span style="color:#ABB2BF">	  		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">        </span></span>
+<span class="line"><span style="color:#C678DD">	  		if</span><span style="color:#E06C75"> val</span><span style="color:#56B6C2"> ==</span><span style="color:#E06C75"> i</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">	  			temp</span><span style="color:#56B6C2">++</span></span>
+<span class="line"><span style="color:#ABB2BF">	  		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">	  	}</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 判断是否符合 有i篇文章至少引用了i次  </span></span>
+<span class="line"><span style="color:#C678DD">	  	if</span><span style="color:#E06C75"> count</span><span style="color:#56B6C2"> &lt;=</span><span style="color:#E06C75"> i</span><span style="color:#56B6C2"> &amp;&amp;</span><span style="color:#E06C75"> count</span><span style="color:#C678DD"> +</span><span style="color:#E06C75"> temp</span><span style="color:#56B6C2"> &gt;=</span><span style="color:#E06C75"> i</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  		return</span><span style="color:#E06C75"> i</span></span>
+<span class="line"><span style="color:#ABB2BF">	  	}</span></span>
+<span class="line"><span style="color:#ABB2BF">	  }</span></span>
+<span class="line"><span style="color:#C678DD">	  return</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>暴力枚举测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(n<sup>2</sup>)</strong>： 由于使用了双重循环，所以时间复杂度为 <strong>O(n<sup>2</sup>)</strong>。</p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(1)</strong>: 由于只使用了常数级别的变量，所以空间复杂度为 <strong>O(1)</strong>。</p>
+</li>
+</ul>
+<h3>2. 排序算法</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>由于有h篇文章的引用大于等于h，所以我们尝试将文章根据引用数量排序。再从大到小遍历，并记录文章篇数。当循环到引用数小于文章篇数时，可以确保有h篇文章至少引用h次，其他文章小于等于h次</p>
+<p><strong>例如</strong><br>
+citations = [3,0,6,1,5]<br>
+排序完成的数组 [0, 1, 3, 5, 6], 记录文章篇数 h = 0<br>
+第一次循环，引用次数为6，大于文章篇数。h++; h == 1<br>
+第二次循环，引用次数为5, 大于文章篇数。h++; h == 2<br>
+第三次循环，引用次数为3，大于文章篇数。h++; h == 3<br>
+第四次循环，引用次数为1，小于文章篇数。此时说明有3篇文章至少引用了3次，其他文章都引用次数都小于三次。满足条件。</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  import</span><span style="color:#98C379"> "sort"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> hIndex</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">citations</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">  	sort</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Ints</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">citations</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E06C75">  	h</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  	for</span><span style="color:#E06C75"> i</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">citations</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">-</span><span style="color:#D19A66"> 1</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2"> &gt;=</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2">--</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  		if</span><span style="color:#E06C75"> citations</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#ABB2BF">] </span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> h</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">  			h</span><span style="color:#56B6C2">++</span></span>
+<span class="line"><span style="color:#ABB2BF">  		} </span><span style="color:#C678DD">else</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  			return</span><span style="color:#E06C75"> h</span></span>
+<span class="line"><span style="color:#ABB2BF">  		}</span></span>
+<span class="line"><span style="color:#ABB2BF">  	}</span></span>
+<span class="line"><span style="color:#C678DD">  	return</span><span style="color:#E06C75"> h</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>排序算法测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(n log n)</strong>： 由于<code>sort.Ints</code>排序算法的时间复杂度为<em>O(n log n)</em>。循环的时间复杂度为<em>O(n)</em>。总时间的时间复杂度为 <em>O(n log n) + O(n)</em>。采用大表示法，即为 <strong>O(n log n)</strong>。</p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(n log n)</strong>: 由于<code>sort.Ints</code>排序算法的空间复杂度为<em>O(n log n)</em>, 其他变量为常数级别，为O(1)。 总时间的空间复杂度为 <em>O(n log n) + O(1)</em>。采用大表示法，即为<strong>O(n log n)</strong>。</p>
+</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Dockerfile详解</title>
+      <link>https://blog.singlequote.cn/server/docker/docker-file.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/docker-file.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">Dockerfile详解</source>
+      <description>Docker,docker，容器，服务器，Dockerfile详解</description>
+      <category>Docker</category>
+      <pubDate>Tue, 16 Apr 2024 10:46:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>什么是 Dockerfile</h2>
+<p><strong>Dockerfile</strong>是一个用于描述 Docker 镜像构建过程的文本文件，这个文件可以包含多条构建指令以及相关的描述。用户可以自定义 <strong>Dockerfile</strong>构建自己的 docker 镜像。</p>
+<h2>Docker 镜像的构建原理</h2>
+<h3>Docker 架构模型</h3>
+<p>Docker 采用的是<strong>C/S</strong>架构。在客户端使用输入构建命令时，Docker 引擎将命令发送到<strong>docker daemon</strong>，docker daemon 就根据请求内容，开始构建工作，并向 Client 持续返回构建过程信息，让用户可以看到当前的构建状态。</p>
+<h3>镜像分层模型</h3>
+<p>Docker 镜像是用于创建容器的<strong>只读模板</strong>。是由 <code>Dockerfile</code> 中定义的指令构建而成。在构建完成时。将会在原有的镜像上生成一个新的镜像层(由很多个 layer 层组成，<strong>Dockerfile</strong>中一行指令即生成一个 layer 层)。</p>
+<figure><figcaption>docker 镜像分层模型</figcaption></figure>
+<p>使用 <code>docker history node-hello-world:latest</code> 或 <code>docker inspect node-hello-world:latest</code> 即可查看<code>node-hello-world:latest</code>镜像分层。</p>
+<figure><figcaption>使用docker history命令查看镜像分层</figcaption></figure>
+<p>其中每一条内容即为<strong>Dockerfile 中每条指令</strong>生成的 layer 层, 配合<code>docker inspect node-hello-world:latest</code> 查看生成的 layer 层信息。</p>
+<figure><figcaption>使用docker inspect命令查看生成layer层信息</figcaption></figure>
+<h3>构建上下文</h3>
+<p>Client 向 Docker daemon 发送构建命令分为两个部分内容，一部分就是最重要的 <strong>Dockerfile</strong> 文件。另一部分就是构建上下文。</p>
+<p>构建上下文是一些文件的集合。这些文件可以是指定路径下的文件，也可以是远程资源中指定路径下的文件。<br>
+构建过程中，Docker daemon 可以访问这些文件，并执行相应操作。</p>
+<p>构建上下文可以分为以下 3 中情况。</p>
+<h4>路径上下文</h4>
+<p>构建命令中指定的具体路径，这个路径下面的所有文件组成的集合即为构建上下文。这些文件将会被打包发送到 Docker daemon 中，然后被解压。</p>
+<p>假设一个项目的文件结构如下:</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">demo</span></span>
+<span class="line"><span style="color:#ABB2BF">|</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> Dockerfile</span></span>
+<span class="line"><span style="color:#ABB2BF">|</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> src</span></span>
+<span class="line"><span style="color:#ABB2BF">|</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> node_modules</span></span>
+<span class="line"><span style="color:#ABB2BF">|</span><span style="color:#61AFEF">--</span><span style="color:#98C379"> test</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>在 demo 文件夹下执行如下构建命令:</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> build</span><span style="color:#D19A66"> -t</span><span style="color:#98C379"> test:v1</span><span style="color:#98C379"> .</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>构建请求的第一部分为 Dockerfile，这个文件在当前文件夹下，文件名是默认名称，可以省略。<br>
+构建的第二部分内容为构建上下文，在构建命令中 <code>.</code> 代表将当前目录作为构建上下文，即 demo 文件夹下所有文件组成的集合成为构建上下文。<br>
+Docker 引擎会把不被 <strong>.dockerignore</strong> 中规则匹配的文件都发送到 Docker daemon。并执行 Dockerfile 中的指令。</p>
+<h4>URL 上下文</h4>
+<p>Docker 还支持利用远程仓库 URL 构建镜像，此时指定远程仓库目录充当构建上下文</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">    docker</span><span style="color:#98C379"> build</span><span style="color:#98C379"> http://gitee.com:user/my-repo.git#master:docker</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>以上构建命令指定了一个 Gitee 项目的 master 分支，冒号 <em>:</em> 之前是 Git 检出的目标 URL，冒号之后的 docker 是远程仓库根目录下的一个子目录，此时这个名为 docker 的子目录就是构建上下文。</p>
+<h4>省略上下文</h4>
+<p>如果 Dockerfile 中的指令不需要对任何文件进行操作，可以省略上下文，此时不会向 Docker daemon 发送额外文件，这可以提高构建速度。</p>
+<p>示例构建命令如下</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">    docker</span><span style="color:#98C379"> build</span><span style="color:#D19A66"> -t</span><span style="color:#98C379"> test:v1</span><span style="color:#98C379"> -</span><span style="color:#ABB2BF">&lt;&lt; </span><span style="color:#ABB2BF">EOF</span></span>
+<span class="line"><span style="color:#98C379">    FROM scratch</span></span>
+<span class="line"><span style="color:#98C379">    RUN echo "hello world"</span></span>
+<span class="line"><span style="color:#98C379">    EOF</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3>构建缓存</h3>
+<p>迭代过程中，Dockerfile 对应的资源会经常修改，因此需要频繁重新构建镜像，Docker 为了提高构建速度，设计了多种优化方案，其中最重要的就是构建缓存。</p>
+<p>下面会通过一个示例来说明构建缓存是如何工作的，Dockerfile 如下</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">    FROM</span><span style="color:#98C379"> node:16</span></span>
+<span class="line"><span style="color:#61AFEF">    ADD</span><span style="color:#98C379"> app.js</span><span style="color:#98C379"> /app/app.js</span></span>
+<span class="line"><span style="color:#61AFEF">    WORKDIR</span><span style="color:#98C379"> /app/</span></span>
+<span class="line"><span style="color:#61AFEF">    CMD</span><span style="color:#98C379"> node</span><span style="color:#98C379"> app.js</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>构建过程中，Dockerfile中指令会从上往下执行，每个构建步骤的结果会被缓存起来，如下图</p>
+<figure><figcaption>构建缓存示例</figcaption></figure>
+<p>再次构建会使用缓存中的值。如果文件有修改，那么使用这个文件的上层所有缓存失效。如修改 <code>app.js</code></p>
+<figure><figcaption>构建缓存失效</figcaption></figure>
+<p>如果不想使用构建缓存可以使用 <code>--no-cache</code> 选项实现。</p>
+<h2>常用构建构建指令</h2>
+<p>|序号|指令|名功能描述|<br>
+|</p>
+]]></content:encoded>
+      <enclosure url="https://w.wallhaven.cc/full/5g/wallhaven-5g8r11.jpg" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>搭建harbor私有仓库</title>
+      <link>https://blog.singlequote.cn/server/docker/store/harbor.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/store/harbor.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">搭建harbor私有仓库</source>
+      <description>Docker,docker，镜像仓库，服务器，harbor搭建</description>
+      <category>Docker</category>
+      <pubDate>Sat, 13 Apr 2024 13:58:14 GMT</pubDate>
+      <content:encoded><![CDATA[<ol>
+<li>
+<p>登录 github 下载<a href="https://github.com/goharbor/harbor/releases" target="_blank" rel="noopener noreferrer">habor 离线安装包</a>，和<a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener noreferrer">docker/compose 组件</a>。<br>
+<br>
+</p>
+</li>
+<li>
+<p>将下载的安装包上传到服务器。</p>
+</li>
+<li>
+<p>使用<code>mv</code>命令将<code>docker/compose</code>组件重命名为<code>docker-compose</code>,并移动到<code>/usr/bin/</code>。</p>
+</li>
+<li>
+<p>使用<code>tar -xvf harbor离线安装包名</code> 解压出 harbor。解压出 harbor 安装包如下：<br>
+<br>
+其中打码部分是 harbor 的 ssl 证书配置</p>
+</li>
+<li>
+<p>复制 <code>harbor.yml.tmpl</code> 文件并重命名为 <code>docker.yml</code>。</p>
+</li>
+<li>
+<p>编辑 <code>harbor.yml</code>，修改其中内容（建议给仓库配置上 ssl 证书）。</p>
+<div class="language-vim line-numbers-mode" data-ext="vim" data-title="vim"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">  # harbor服务的仓库</span></span>
+<span class="line"><span style="color:#ABB2BF">  hostname: reg.mydomain.</span><span style="color:#C678DD">com</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">  # http相关内容</span></span>
+<span class="line"><span style="color:#ABB2BF">  http:</span></span>
+<span class="line"><span style="color:#ABB2BF">    # 设置http访问端口。默认是80。</span></span>
+<span class="line"><span style="color:#ABB2BF">    port: http_port</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">  # https相关</span></span>
+<span class="line"><span style="color:#ABB2BF">  https:</span></span>
+<span class="line"><span style="color:#ABB2BF">    # https访问端口。默认443</span></span>
+<span class="line"><span style="color:#ABB2BF">    port: https_port</span></span>
+<span class="line"><span style="color:#ABB2BF">    # https证书文件路径</span></span>
+<span class="line"><span style="color:#ABB2BF">    certificate: </span><span style="color:#E06C75">/your/</span><span style="color:#ABB2BF">certificate/path</span></span>
+<span class="line"><span style="color:#ABB2BF">    # https证书私钥路径</span></span>
+<span class="line"><span style="color:#ABB2BF">    private_key: </span><span style="color:#E06C75">/your/</span><span style="color:#ABB2BF">private</span><span style="color:#E06C75">/key/</span><span style="color:#ABB2BF">path</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">  # harbor管理员密码（账号为admin），默认Harbor12345</span></span>
+<span class="line"><span style="color:#ABB2BF">  harbor_admin_password: Harbor12345</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></li>
+<li>
+<p>运行 <code>prepare</code> 文件。</p>
+</li>
+<li>
+<p>执行安装脚本 <code>install.sh</code>。</p>
+</li>
+<li>
+<p>此时你就已经安装好 harbor 了。可以使用设置的域名或者 ip 加端口访问仓库管理页面。<br>
+</p>
+</li>
+<li>
+<p>新建一个项目。此时你就可以向项目中推送镜像了。镜像上传下载操作和 <code>docker hub</code> 和 <code>阿里云容器镜像仓库</code>差不多。具体可以参考文章<a href="/docker-hub">docker hub使用</a>、<a href="/ali-container-store">阿里云容器镜像仓库使用</a>。注意在使用 <code>docker login</code> 登录时记得加上自己的仓库地址。<br>
+</p>
+</li>
+</ol>
+]]></content:encoded>
+      <enclosure url="https://w.wallhaven.cc/full/ex/wallhaven-ex136k.jpg" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>跳跃游戏II</title>
+      <link>https://blog.singlequote.cn/leetcode/%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8FII.html</link>
+      <guid>https://blog.singlequote.cn/leetcode/%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8FII.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">跳跃游戏II</source>
+      <description>算法，数组，跳跃游戏II，golang</description>
+      <category>算法</category>
+      <pubDate>Fri, 12 Apr 2024 19:56:06 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>题目</h2>
+<p>给定一个长度为 n 的 <strong>0 索引</strong>整数数组 nums。初始位置为 nums[0]。</p>
+<p>每个元素 nums[i] 表示从索引 i 向前跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:</p>
+<ul>
+<li>0 &lt;= j &lt;= nums[i]</li>
+<li>i + j &lt; n</li>
+</ul>
+<p>返回到达 nums[n - 1] 的<strong>最小跳跃次数</strong>。生成的测试用例可以到达 nums[n - 1]。</p>
+<p><strong>示例 1：</strong></p>
+<blockquote>
+<p>输入: nums = [2,3,1,1,4]<br>
+输出: 2<br>
+解释: 跳到最后一个位置的最小跳跃数是 2。<br>
+从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。</p>
+</blockquote>
+<p><strong>示例 2：</strong></p>
+<blockquote>
+<p>输入: nums = [2,3,0,1,4]<br>
+输出: 2</p>
+</blockquote>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 10^4^</code></li>
+<li><code>0 &lt;= prices[i] &lt;= 1000</code></li>
+<li>题目保证可以到达 <code>nums[n-1]</code></li>
+</ul>
+<h2>解法</h2>
+<h3>1. 暴力枚举</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>由于一定能跳跃到最后<code>nums[n-1]</code>处。所以我们可以通过判断 <strong>能跳到指定位置的最远位置</strong>,直到这个最远位置为<strong>0</strong>，所用的次数即为最小次数。</p>
+<p>例如:<br>
+nums = [2,3,1,1,4]<br>
+要判断能到达 4(index == 4)的位置为 3（index == 1）、1（index == 3）,其中最远位置为 3（index == 1）。<br>
+接着判断能到达 3（index == 3）的位置为 2（index == 0），即使用次数为 2 次。</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> jump</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 当前位置为最后一位</span></span>
+<span class="line"><span style="color:#E06C75">    position</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">-</span><span style="color:#D19A66"> 1</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 需要跳的次数</span></span>
+<span class="line"><span style="color:#E06C75">    steps</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 当这个位置为0时停止</span></span>
+<span class="line"><span style="color:#C678DD">    for</span><span style="color:#E06C75"> position</span><span style="color:#56B6C2"> &gt;</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">        for</span><span style="color:#E06C75"> i</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2"> &lt;</span><span style="color:#E06C75"> position</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2">++</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">            // 从数组最开始循环，第一个能到达这个位置的位置即为最远位置</span></span>
+<span class="line"><span style="color:#C678DD">            if</span><span style="color:#E06C75"> i</span><span style="color:#C678DD"> +</span><span style="color:#E06C75"> nums</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#ABB2BF">] </span><span style="color:#56B6C2">&gt;=</span><span style="color:#E06C75"> position</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">                // 更改最远位置</span></span>
+<span class="line"><span style="color:#E06C75">                position</span><span style="color:#E5C07B"> =</span><span style="color:#E06C75"> i</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">                // 跳跃次数+1</span></span>
+<span class="line"><span style="color:#E06C75">                steps</span><span style="color:#56B6C2">++</span></span>
+<span class="line"><span style="color:#C678DD">                break</span></span>
+<span class="line"><span style="color:#ABB2BF">            }</span></span>
+<span class="line"><span style="color:#ABB2BF">        }</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#C678DD">    return</span><span style="color:#E06C75"> steps</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>暴力枚举测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(n<sup>2</sup>)</strong>：因为使用了双重循环，所以时间复杂度为 <strong>O(n<sup>2</sup>)</strong></p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(1)</strong>: 因为所有的变量都是常数级别的，因为空间复杂度为 <strong>O(1)</strong>。</p>
+</li>
+</ul>
+<h3>2.贪心算法</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>当前位置能跳到的最远位置为<strong>k = nums[index]+index</strong>, 但随着起跳点的变动，这个 k 也会随之变动；我们定义另外一个变量 <code>next</code> 来保存当前这段起跳的终点，当起跳点在 <strong><code>(index，next]</code></strong> 这个区间时，为下一次跳跃, 即当 **<code>index == next+1</code>**时为下一次跳跃。当有一个位置能跳跃到最后位置时结束。<br>
+<strong>需要考虑特殊条件，当<code>len(nums) == 1</code>时，不用跳跃</strong></p>
+<p>例如:<br>
+nums = [2,3,1,1,4,7,7]<br>
+第一次起跳 2（index == 0）。最大跳跃位置为 1（index == 2）。<br>
+第二次跳跃的起点区间为[3,1]（index为[1,2]），最大跳跃位置为 4 (index == 4)。<br>
+第三次跳跃的起点区间为[1,4]（index为[3,4]）,最大跳跃位置 index == 8，超过数组最后一位的下标，即能直接跳跃到终点。</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  import</span><span style="color:#98C379"> "math"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> jump</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">	  k</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#E06C75">	  n</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#E06C75">	  count</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 1</span></span>
+<span class="line"><span style="color:#E06C75">	  next</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#C678DD">	  if</span><span style="color:#E06C75"> n</span><span style="color:#56B6C2"> ==</span><span style="color:#D19A66"> 1</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">		  return</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#ABB2BF">	  }</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">	  for</span><span style="color:#E06C75"> index</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">num</span><span style="color:#E5C07B"> :=</span><span style="color:#C678DD"> range</span><span style="color:#E06C75"> nums</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#ABB2BF">      </span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 当起跳点超过这次起跳段的终点时即视为下一次起跳</span></span>
+<span class="line"><span style="color:#C678DD">      if</span><span style="color:#E06C75"> index</span><span style="color:#56B6C2"> ==</span><span style="color:#E06C75"> next</span><span style="color:#C678DD"> +</span><span style="color:#D19A66"> 1</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">        // 将下一次的起跳段的终点设置为能跳到的最远距离</span></span>
+<span class="line"><span style="color:#E06C75">			  next</span><span style="color:#E5C07B"> =</span><span style="color:#E06C75"> k</span></span>
+<span class="line"><span style="color:#E06C75">			  count</span><span style="color:#56B6C2">++</span></span>
+<span class="line"><span style="color:#ABB2BF">		  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 当能跳跃到重点时结束</span></span>
+<span class="line"><span style="color:#C678DD">		  if</span><span style="color:#E06C75"> index</span><span style="color:#C678DD">+</span><span style="color:#E06C75">num</span><span style="color:#56B6C2"> &gt;=</span><span style="color:#E06C75"> n</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">			  return</span><span style="color:#E06C75"> count</span></span>
+<span class="line"><span style="color:#ABB2BF">		  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 实时计算最大位置k</span></span>
+<span class="line"><span style="color:#E06C75">      k</span><span style="color:#E5C07B"> =</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">math</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Max</span><span style="color:#ABB2BF">(</span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">k</span><span style="color:#ABB2BF">), </span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">index</span><span style="color:#C678DD">+</span><span style="color:#E06C75">num</span><span style="color:#ABB2BF">)))</span></span>
+<span class="line"><span style="color:#ABB2BF">	  } </span></span>
+<span class="line"><span style="color:#C678DD">	  return</span><span style="color:#E06C75"> count</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>贪心算法测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>时间复杂度 <strong>O(n)</strong>: 因为只遍历了一遍数组，所以时间复杂度为 <strong>O(n)</strong></li>
+<li>空间复杂度 <strong>O(1)</strong>：因为该函数只使用了常量级别的额外空间, 所以空间复杂度为 <strong>O(1)</strong>。</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>阿里容器镜像仓库使用</title>
+      <link>https://blog.singlequote.cn/server/docker/store/ali-conainer-store.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/store/ali-conainer-store.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">阿里容器镜像仓库使用</source>
+      <description>Docker,docker，镜像仓库，服务器，阿里容器镜像仓库使用</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 19:56:06 GMT</pubDate>
+      <content:encoded><![CDATA[<ol>
+<li>
+<p>进入<a href="https://cr.console.aliyun.com/" target="_blank" rel="noopener noreferrer">阿里云容器镜像</a>服务并登录。</p>
+</li>
+<li>
+<p>选择个人实例（免费）并进入。<br>
+</p>
+</li>
+<li>
+<p>点击容器镜像仓库并创建。此时你就拥有了自己的容器镜像仓库。</p>
+</li>
+<li>
+<p>到服务器上 登录阿里云 Docker Registry</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> login</span><span style="color:#D19A66"> --username=username</span><span style="color:#98C379"> registry.cn-chengdu.aliyuncs.com</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div></div></div><p>用于登录的用户名为阿里云账号全名，密码为开通服务时设置的密码。<br>
+您可以在访问凭证页面修改凭证密码。</p>
+</li>
+<li>
+<p>从 Registry 中拉取镜像。</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">  docker</span><span style="color:#98C379"> pull</span><span style="color:#98C379"> registry.cn-chengdu.aliyuncs.com/NAMESAPCE/REPOSITORY:[TAG]</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div></li>
+<li>
+<p>将镜像推送到 Registry。</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> login</span><span style="color:#D19A66"> --username=username</span><span style="color:#98C379"> registry.cn-chengdu.aliyuncs.com</span></span>
+<span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> tag</span><span style="color:#ABB2BF"> [ImageId] registry.cn-chengdu.aliyuncs.com/NAMESPACE/REPOSITORY:[TAG]</span></span>
+<span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> push</span><span style="color:#98C379"> registry.cn-chengdu.aliyuncs.com/docker_std1/nginx:[镜像版本号]</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>请根据实际镜像信息替换示例中 NAMESPACE 的[ImageId]和[TAG]参数。</p>
+</li>
+<li>
+<p>选择合适的镜像仓库地址。<br>
+从 ECS 推送镜像时，可以选择使用镜像仓库内网地址。推送速度将得到提升并且将不会损耗您的公网流量。<br>
+如果您使用的机器位于 VPC 网络，请使用 <code>registry-vpc.cn-chengdu.aliyuncs.com</code> 作为 Registry 的域名登录。</p>
+</li>
+<li>
+<p>示例<br>
+使用<code>docker tag</code>命令重命名镜像，并将它通过专有网络地址推送至 Registry。</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF"> docker</span><span style="color:#98C379"> images</span></span>
+<span class="line"><span style="color:#61AFEF"> REPOSITORY</span><span style="color:#98C379"> TAG</span><span style="color:#98C379"> IMAGE</span><span style="color:#98C379"> ID</span><span style="color:#98C379"> CREATED</span><span style="color:#98C379"> VIRTUAL</span></span>
+<span class="line"><span style="color:#61AFEF"> SIZEregistry.aliyuncs.com/acs/agent</span><span style="color:#98C379"> 0.7-dfb6816</span><span style="color:#98C379"> 37bb9c63c8b2</span><span style="color:#D19A66"> 7</span><span style="color:#98C379"> days</span><span style="color:#98C379"> ago</span><span style="color:#D19A66"> 37.89</span><span style="color:#98C379"> MB</span></span>
+<span class="line"><span style="color:#61AFEF"> docker</span><span style="color:#98C379"> tag</span><span style="color:#98C379"> 37bb9c63c8b2</span><span style="color:#98C379"> registry-vpc.cn-chengdu.aliyuncs.com/acs/agent:0.7-dfb6816</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>使用 <code>docker push</code> 命令将该镜像推送至远程。</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> push</span><span style="color:#98C379"> registry-vpc.cn-chengdu.aliyuncs.com/acs/agent:0.7-dfb6816</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div></li>
+</ol>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Docker hub使用</title>
+      <link>https://blog.singlequote.cn/server/docker/store/docker-hub.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/store/docker-hub.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">Docker hub使用</source>
+      <description>Docker,docker，镜像仓库，服务器，Docker Hub使用</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 19:56:06 GMT</pubDate>
+      <content:encoded><![CDATA[<ol>
+<li>
+<p>在 <a href="https://hub.docker.com/" target="_blank" rel="noopener noreferrer">docker hub 官网</a>注册并登录账号。<br>
+</p>
+</li>
+<li>
+<p>在官网创建自己的容器镜像仓库。<br>
+<br>
+</p>
+</li>
+<li>
+<p>此时你已经拥有一个容器镜像仓库，接下来在服务器上登录 docker 使用 <code>docker login</code> 命令登录 <code>docker hub</code><br>
+</p>
+</li>
+<li>
+<p>使用<code>docker tag</code>命令给需要上传的镜像打 tag。</p>
+<div class="language-bash line-numbers-mode" data-ext="sh" data-title="sh"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">docker</span><span style="color:#98C379"> tag</span><span style="color:#98C379"> REPOSITORY:TAG</span><span style="color:#98C379"> NAMESPACE/REPOSITORY:TAG</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p><br>
+<strong>注意事项</strong>：给需要上传的镜像打 tag 的时候需要加上自己的<code>docker hub</code>命令空间前缀。</p>
+</li>
+<li>
+<p>使用 <code>docker push NAMESPACE/REPOSITORY:TAG</code> 将上传到你的<code>docker hub</code>的仓库中。<br>
+<br>
+此时，你的镜像仓库中已经有你上传的镜像了<br>
+</p>
+</li>
+<li>
+<p>使用<code>docker pull NAMESPACE/REPOSITORY:TAG</code>方式从镜像仓库拉取镜像<br>
+</p>
+</li>
+<li>
+<p>使用<code>docker logout</code>退出登录<br>
+</p>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Docker基本命令</title>
+      <link>https://blog.singlequote.cn/server/docker/basic-command.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/basic-command.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">Docker基本命令</source>
+      <description>Docker,docker，容器，服务器，Docker基本命令</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 16:02:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h3>查看本地镜像列表</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker images [options]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a，--all：查看所有镜像，包括默认隐藏的<br>
+-q, --quite：返回镜像 id, 可以用批量删除镜像</p>
+</blockquote>
+<h3>查看容器列表</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker ps [options]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a，--all：查看所有容器（默认只显示运行的容器）<br>
+-n，--last int：查看最新创建的 n 个容器<br>
+-l，--latest：查看最新创建的容器<br>
+-q, --quite：返回容器 id, 可以用于批量停止，删除镜像</p>
+</blockquote>
+<h3>拉取容器镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker pull [options] NAME[:TAG|@DIGEST]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a，--all-tags：下载所有版本镜像<br>
+-q，--quite：抑制冗长输出</p>
+</blockquote>
+<h3>从镜像创建并运行一个新的容器</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker run [options] image [COMMAND][ARG...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a, --attach list： 附加到标准输入、标准输出或标准错误<br>
+--cpus int：cpu 数量<br>
+-d，--detach：在后台运行容器，并打印容器 ID<br>
+-i，--interactive：打开便准输入，即使没有附加<br>
+-m，--memory bytes：内存限制<br>
+--name string：设置容器名称<br>
+-p，--publish list：将容器端口映射到主机-p 8080:80<br>
+-q，--quiet：不输出 docker pull 信息<br>
+-t，--tty：分配一个伪终端<br>
+-v，--volume list：绑定挂载卷-v ./usr/local/nginx/conf/:/etc/nginx/conf/<br>
+-m, --memory bytes 设置内存限制。（可以使用 M 为单位）<br>
+--memory-swap bytes: 设置交换内存，默认等于 <code>--memory</code>。（可以使用 M 为单位）<br>
+-c, --cpu-shares int: 设置容器cpu使用权重</p>
+</blockquote>
+<h3>停止运行中的容器</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker stop [options] CONTAINER [CONTAINER...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-s，--signal string：发送信号到容器<br>
+-t，--time：多少秒之后停止容器运行</p>
+</blockquote>
+<h3>启动停止中的容器</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker start [options] CONTAINER [CONTAINER...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a，--attach：附加便准输出和标准错误信号转发<br>
+-i，--interactive：附加容器标准输入</p>
+</blockquote>
+<h3>删除退出的容器</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker rm [options] CONTAINER [CONTAINER...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-f，--force：强制删除正在运行的容器<br>
+-v，--volumes：删除与容器关联的匿名卷</p>
+</blockquote>
+<h3>返回低级别的 docker 信息</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker inspect [options] NAME|ID [NAME|ID...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-s，--size：如果是容器则显示总文件的大小</p>
+</blockquote>
+<h3>在正在运行的容器中执行命令</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker exec [options] CONTAINER COMMAND [ARG...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-d，--detach：后台模式，在后台运行命令<br>
+-i，--interactive：保持标准输入打开<br>
+-t，--tty：分配一个伪终端</p>
+</blockquote>
+<h3>删除本地容器镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker rmi [options] IMAGE [IMAGE...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-f，--force：强制删除</p>
+</blockquote>
+<h3>删除未使用的容器镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker image prune [options]</p>
+</blockquote>
+<h4>options</h4>
+<p>-f，--force：强制删除<br>
+-a，--all：删除所有未使用到的镜像</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Docker容器镜像操作</title>
+      <link>https://blog.singlequote.cn/server/docker/container-image.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/container-image.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">Docker容器镜像操作</source>
+      <description>Docker,docker，容器，服务器，Docker容器镜像操作命令</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 16:40:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h3>查看本地容器镜像</h3>
+<p>本地容器镜像一般保存在 <strong>/var/lib/docker</strong> 中</p>
+<h3>搜索 Docker Hub 容器镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker search [options] TERM</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>--limit：搜索结果最大数量限制</p>
+</blockquote>
+<h3>根据改变后的容器创建一个新镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker commit [options] CONTAINER [REPOSITORY[:TAG]]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-a，--author string：作者<br>
+-m，--message string：提交信息</p>
+</blockquote>
+<h3>将镜像打包成 tar 包</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker save [options] IMAGE [IMAGE...]</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-o，--output string：文件输出路径</p>
+</blockquote>
+<h4>注意事项</h4>
+<p>若保存使用的是 image id，将不会保存 REPOSITORY 和 TAG 信息</p>
+<h3>将 tar 包导入成镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker load [options]</p>
+</blockquote>
+<h4>options</h4>
+<p>-i，--input string： 导入文件路径<br>
+-q，--quiet：不显示导入信息</p>
+<h4>注意事项</h4>
+<p>如果在使用 docker save 时，使用的是 image id，那么导出的 tar 包将不会保存 REPOSITORY 和 TAG 信息。在 docker load 之后需要使用 docker tag 命令进行重新设置。</p>
+<h3>将容器打包成 tar 包</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker export [options] CONTAINER</p>
+</blockquote>
+<h4>options</h4>
+<blockquote>
+<p>-o，--output string：文件输出路径</p>
+</blockquote>
+<h3>将使用 docker export 导出的 tar 包还原成镜像</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker import [options] FILE|URL [REPOSITORY[:TAG]]</p>
+</blockquote>
+<h4>options</h4>
+<p>-m, --message string：设置导入信息</p>
+<h3>修改 TAG 信息</h3>
+<h4>语法</h4>
+<blockquote>
+<p>docker tag SOURCE_IMAGE[:TAG] TARHET_IMAGE[:TAG]</p>
+</blockquote>
+<h4>options</h4>
+<p>-m, --message string：设置导入信息</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>安装Docker</title>
+      <link>https://blog.singlequote.cn/server/docker/env/%E5%AE%89%E8%A3%85.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/env/%E5%AE%89%E8%A3%85.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">安装Docker</source>
+      <description>Docker,docker，容器，服务器，安装Docker</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 10:15:48 GMT</pubDate>
+      <content:encoded><![CDATA[<ol>
+<li>
+<p>百度搜索阿里开源镜像站</p>
+</li>
+<li>
+<p>选择容器</p>
+</li>
+<li>
+<p>选择 <code>docker-ce(https://developer.aliyun.com/mirror/docker-ce?spm=a2c6h.13651102.0.0.4e771b11EBttZi)</code></p>
+</li>
+<li>
+<p>若是在 centos 上可以直接 使用 <code>wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo</code> 安装阿里的软件源信息</p>
+</li>
+<li>
+<p>使用 <code>yum install -y docker-ce</code></p>
+</li>
+<li>
+<p>安装好之后使用 <code>systemctl enable --now docker</code> 启动 docker 并设置开机自启</p>
+</li>
+<li>
+<p>使用 <code>systemctl status docker</code> 检查 docker 是否启动</p>
+<figure><figcaption>检查Docker是否启动</figcaption></figure>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>配置文件镜像加速器</title>
+      <link>https://blog.singlequote.cn/server/docker/env/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8.html</link>
+      <guid>https://blog.singlequote.cn/server/docker/env/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">配置文件镜像加速器</source>
+      <description>Docker,docker，容器，服务器，配置Docker文件镜像加速器</description>
+      <category>Docker</category>
+      <pubDate>Fri, 12 Apr 2024 15:32:00 GMT</pubDate>
+      <content:encoded><![CDATA[<ol>
+<li>
+<p>使用命令 <code>touch /etc/docker/daemon.json</code> 创建 <code>/etc/docker/daemon.json</code> 文件。</p>
+</li>
+<li>
+<p>将一下内容写入<code>/etc/docker/daemon.json</code>：</p>
+</li>
+</ol>
+<div class="language-json line-numbers-mode" data-ext="json" data-title="json"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">  {</span></span>
+<span class="line"><span style="color:#E06C75">       "registry-mirrors"</span><span style="color:#ABB2BF">: [</span><span style="color:#98C379">"https://bfnidxxo.mirror.aliyuncs.com"</span><span style="color:#ABB2BF">]</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ol start="3">
+<li>
+<p>使用<code>systemctl daemon-reload</code>命令重新加载配置。</p>
+</li>
+<li>
+<p>使用<code>systemctl restart docker</code>重启docker服务。</p>
+</li>
+<li>
+<p>其他系统的服务器配置详情见 <a href="https://cr.console.aliyun.com/cn-chengdu/instances/mirrors" target="_blank" rel="noopener noreferrer">阿里云镜像加速器</a></p>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>跳跃游戏</title>
+      <link>https://blog.singlequote.cn/leetcode/%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html</link>
+      <guid>https://blog.singlequote.cn/leetcode/%E8%B7%B3%E8%B7%83%E6%B8%B8%E6%88%8F.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">跳跃游戏</source>
+      <description>算法，数组，跳跃游戏，golang</description>
+      <category>算法</category>
+      <pubDate>Thu, 11 Apr 2024 00:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>题目</h2>
+<p>给你一个非负整数数组 nums ，你最初位于数组的 <strong>第一个下标</strong> 。数组中的每个元素代表你在该位置<strong>可以跳跃的最大长度</strong>。</p>
+<p>判断你是否<strong>能够到达最后一个下标</strong>，如果可以，返回 true ；否则，返回 false 。</p>
+<p><strong>示例 1：</strong></p>
+<blockquote>
+<p>输入：nums = [2,3,1,1,4]<br>
+输出：true<br>
+解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。</p>
+</blockquote>
+<p><strong>示例 2：</strong></p>
+<blockquote>
+<p>输入：nums = [3,2,1,0,4]<br>
+输出：false<br>
+解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。</p>
+</blockquote>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10^4^</code></li>
+<li><code>0 &lt;= nums[i] &lt;= 10^5^</code></li>
+</ul>
+<h2>解法</h2>
+<h3>1. 暴力枚举</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>可以将问题拆分，分别判断是否有位置可以到达当前位置，如果有位置能到达当前并且这个能到达当前位置的位置为 index 0，则代表可以从第一个位置跳到当前位置</p>
+<p>例如:<br>
+nums = [2,3,1,1,4]<br>
+要判断能否到达最后一位(index == 4),则需要判断 [2,3,1,1] 中是否有元素能跳到 4（index == 4）；<br>
+我们发现 2（index == 0）无法跳到 4（index == 4）； 3（index ==1） 可以跳到 4（index == 4）；</p>
+<p>那么我们下一步就需要判断 [2] 中是否有元素能跳到 3（index == 1）；<br>
+此时 2（index == 0）能跳到 3（index == 1）；并且此时 判断的这个位置为 index == 0；则表示可以从最开始的位置跳到最后位置；</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">  /**</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * 判断是否有位置能跳到指定位置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param nums 待判断的位置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param target 指定位置的index</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @return { 是否能跳到指定位置，能跳到指定位置的这个位置的indx }</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   */</span></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> canGo</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">target</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">) (</span><span style="color:#C678DD">bool</span><span style="color:#ABB2BF">, </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) {</span></span>
+<span class="line"><span style="color:#C678DD">	  for</span><span style="color:#E06C75"> i</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">num</span><span style="color:#E5C07B"> :=</span><span style="color:#C678DD"> range</span><span style="color:#E06C75"> nums</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">		  if</span><span style="color:#E06C75"> i</span><span style="color:#C678DD">+</span><span style="color:#E06C75">num</span><span style="color:#56B6C2"> &gt;=</span><span style="color:#E06C75"> target</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">			  return</span><span style="color:#D19A66"> true</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">i</span></span>
+<span class="line"><span style="color:#ABB2BF">		  }</span></span>
+<span class="line"><span style="color:#ABB2BF">	  }</span></span>
+<span class="line"><span style="color:#C678DD">	  return</span><span style="color:#D19A66"> false</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">0</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> canJump</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">bool</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">  	index</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">-</span><span style="color:#D19A66"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 如果只有一个元素，则一定能到最后一个位置</span></span>
+<span class="line"><span style="color:#C678DD">  	if</span><span style="color:#E06C75"> index</span><span style="color:#56B6C2"> ==</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  		return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">  	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  	for</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 判断是否最后一个位置之前是否有位置能跳跃到最后一个位置</span></span>
+<span class="line"><span style="color:#E06C75">  		ok</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">idx</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> canGo</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF">[:</span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">], </span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">  		if</span><span style="color:#56B6C2"> !</span><span style="color:#E06C75">ok</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  			return</span><span style="color:#D19A66"> false</span></span>
+<span class="line"><span style="color:#ABB2BF">  		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 如果有并且位置为0 则代表可以从第一个位置跳到最后一个位置</span></span>
+<span class="line"><span style="color:#C678DD">  		if</span><span style="color:#E06C75"> ok</span><span style="color:#56B6C2"> &amp;&amp;</span><span style="color:#E06C75"> idx</span><span style="color:#56B6C2"> ==</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">  			return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">  		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 如果位置不为0，进入下一轮循环；判断这个位置之前是否有位置可以跳到这个位置</span></span>
+<span class="line"><span style="color:#E06C75">  		index</span><span style="color:#E5C07B"> =</span><span style="color:#E06C75"> idx</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ABB2BF">  	}</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>暴力枚举测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(n<sup>2</sup>)</strong>："canJump"函数中主要有一个外层循环和一个内层的"canGo"函数。外层循环的次数最多为数组 nums 的长度，也就是 n。而对于每一次外层循环，"canGo"函数都要遍历一次数组，因此"canGo"函数的时间复杂度也是 O(n)。因此，总的时间复杂度就是 O(n<sup>2</sup>)。</p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(1)</strong>: 因为所有的变量都是常数级别的，因为空间复杂度为 <strong>O(1)</strong>。</p>
+</li>
+</ul>
+<h3>2.贪心算法</h3>
+<h4>解题思路</h4>
+<div class="hint-container tip">
+<p class="hint-container-title">提示</p>
+<p>当前位置的数（nums[index]）加上当前位置的索引（index）表示我们可以跳到的最远的位置。我们可以定义一个变量（k）表示当前可以跳到的最远的位置，循环数组，不断的去维护这个最远位置；<br>
+如果当前位置（index）大于这个最远的位置，则代表这个位置之前的所有位置都不能跳到当前位置，则返回 false。<br>
+如果最远位置(k)大于最后一位（len(nums)）表示可以从最开始位置跳到最后位置。</p>
+</div>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> canJump</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">bool</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">	  k</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#E06C75">	  n</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">nums</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">	  for</span><span style="color:#E06C75"> index</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">num</span><span style="color:#E5C07B"> :=</span><span style="color:#C678DD"> range</span><span style="color:#E06C75"> nums</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  	if</span><span style="color:#E06C75"> index</span><span style="color:#56B6C2"> &gt;</span><span style="color:#E06C75"> k</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  		return</span><span style="color:#D19A66"> false</span></span>
+<span class="line"><span style="color:#ABB2BF">	  	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">	  	if</span><span style="color:#E06C75"> index</span><span style="color:#C678DD">+</span><span style="color:#E06C75">num</span><span style="color:#56B6C2"> &gt;=</span><span style="color:#E06C75"> n</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">	  		return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">	  	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75">	  	k</span><span style="color:#E5C07B"> =</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">math</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Max</span><span style="color:#ABB2BF">(</span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">k</span><span style="color:#ABB2BF">), </span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">index</span><span style="color:#C678DD">+</span><span style="color:#E06C75">num</span><span style="color:#ABB2BF">)))</span></span>
+<span class="line"><span style="color:#ABB2BF">	  }</span></span>
+<span class="line"><span style="color:#C678DD">	  return</span><span style="color:#D19A66"> true</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>贪心算法测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>时间复杂度 <strong>O(n)</strong>: 因为只遍历了一遍数组，所以时间复杂度为 <strong>O(n)</strong></li>
+<li>空间复杂度 <strong>O(1)</strong>：因为该函数只使用了常量级别的额外空间, 所以空间复杂度为 <strong>O(1)</strong>。</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>买股票的最佳时机II</title>
+      <link>https://blog.singlequote.cn/leetcode/%E4%B9%B0%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BAII.html</link>
+      <guid>https://blog.singlequote.cn/leetcode/%E4%B9%B0%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BAII.html</guid>
+      <source url="https://blog.singlequote.cn/rss.xml">买股票的最佳时机II</source>
+      <description>算法，数组，买股票的最佳时机II，golang</description>
+      <category>算法</category>
+      <pubDate>Wed, 10 Apr 2024 00:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[<h2>题目</h2>
+<p>给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。<br>
+在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。<br>
+返回 你能获得的 <strong>最大</strong> 利润 。</p>
+<p><strong>示例 1：</strong></p>
+<blockquote>
+<p>输入：prices = [7,1,5,3,6,4]<br>
+输出：7<br>
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。<br>
+随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3 。<br>
+总利润为 4 + 3 = 7 。</p>
+</blockquote>
+<p><strong>示例 2：</strong></p>
+<blockquote>
+<p>输入：prices = [1,2,3,4,5]<br>
+输出：4<br>
+解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。<br>
+总利润为 4 。</p>
+</blockquote>
+<p><strong>示例 3：</strong></p>
+<blockquote>
+<p>输入：prices = [7,6,4,3,1]<br>
+输出：0<br>
+解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0 。</p>
+</blockquote>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 3 * 10^4^</code></li>
+<li><code>0 &lt;= prices[i] &lt;= 10^4^</code></li>
+</ul>
+<h2>解法</h2>
+<h3>1. 暴力枚举</h3>
+<h4>解题思路</h4>
+<p>假设手上有股票，则可以卖出股票或不操作。假设手上有股票，可以选择买入或不操作。穷举出所有操作，并记录最后的利润。</p>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  import</span><span style="color:#98C379"> "math"</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">  // 利润</span></span>
+<span class="line"><span style="color:#C678DD">  var</span><span style="color:#E06C75"> res</span><span style="color:#E5C07B">  =</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> maxProfit</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">    n</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 小于两天则最大利润为0</span></span>
+<span class="line"><span style="color:#C678DD">    if</span><span style="color:#E06C75"> n</span><span style="color:#56B6C2"> &lt;</span><span style="color:#D19A66"> 2</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">        return</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#E06C75">    res</span><span style="color:#E5C07B"> =</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#61AFEF">    indeterminate</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">0</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">n</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">false</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">res</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">    return</span><span style="color:#E06C75"> res</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">  /**</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param prices 股票票价</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param index 当前是哪天</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param n 总共有多少天</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param hasStock 手上时候持有股票</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   * @param profit 当前利润</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">   */</span></span>
+<span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> indeterminate</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">index</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">n</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">hasStock</span><span style="color:#C678DD"> bool</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">profit</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">) {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 最后一天之后比较出最大的利润</span></span>
+<span class="line"><span style="color:#C678DD">    if</span><span style="color:#E06C75"> index</span><span style="color:#56B6C2"> ==</span><span style="color:#E06C75"> n</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">        res</span><span style="color:#E5C07B"> =</span><span style="color:#C678DD"> int</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">math</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">Max</span><span style="color:#ABB2BF">(</span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">res</span><span style="color:#ABB2BF">), </span><span style="color:#C678DD">float64</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">profit</span><span style="color:#ABB2BF">)))</span></span>
+<span class="line"><span style="color:#C678DD">        return</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">    // 不操作</span></span>
+<span class="line"><span style="color:#61AFEF">    indeterminate</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">index</span><span style="color:#C678DD">+</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">n</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">hasStock</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">profit</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD">    if</span><span style="color:#E06C75"> hasStock</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 尝试卖出</span></span>
+<span class="line"><span style="color:#61AFEF">      indeterminate</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">index</span><span style="color:#C678DD">+</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">n</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">false</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">profit</span><span style="color:#C678DD">+</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">])</span></span>
+<span class="line"><span style="color:#ABB2BF">    } </span><span style="color:#C678DD">else</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic">      // 尝试买入</span></span>
+<span class="line"><span style="color:#61AFEF">      indeterminate</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">index</span><span style="color:#C678DD">+</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">n</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">true</span><span style="color:#ABB2BF">, </span><span style="color:#E06C75">profit</span><span style="color:#C678DD">-</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">index</span><span style="color:#ABB2BF">])</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>暴力枚举测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>
+<p>时间复杂度 <strong>O(2<sup>n</sup>)</strong>：由于在此函数中无论是否操作，递归都会继续深入到下一天，所以不操作并不会增加时间复杂度。因此，我们只考虑买入和卖出这两种操作的时间复杂度。它尝试了数组中每个元素的两种可能性（买入和卖出）时间复杂度为 <strong>O(2<sup>n</sup>)</strong></p>
+</li>
+<li>
+<p>空间复杂度 <strong>O(n)</strong>: 其中 n 是数组的长度。这是由于递归的深度为 n，每一层递归需要 O(1)的空间，因此总的空间复杂度为 <strong>O(n)</strong>。</p>
+</li>
+</ul>
+<h3>2.贪心算法</h3>
+<h4>解题思路</h4>
+<p>由于当天可以进行卖出和买入，当今天比昨天票价更高，则卖出。此时的利润将会是最高的</p>
+<h4>代码示例</h4>
+<div class="language-go line-numbers-mode" data-ext="go" data-title="go"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">  func</span><span style="color:#61AFEF"> maxProfit</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF"> []</span><span style="color:#C678DD">int</span><span style="color:#ABB2BF">) </span><span style="color:#C678DD">int</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#E06C75">    profit</span><span style="color:#E5C07B"> :=</span><span style="color:#D19A66"> 0</span></span>
+<span class="line"><span style="color:#E06C75">    n</span><span style="color:#E5C07B"> :=</span><span style="color:#61AFEF"> len</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">)</span></span>
+<span class="line"><span style="color:#C678DD">    for</span><span style="color:#E06C75"> i</span><span style="color:#E5C07B">:=</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2"> &lt;</span><span style="color:#E06C75"> n</span><span style="color:#ABB2BF">; </span><span style="color:#E06C75">i</span><span style="color:#56B6C2">++</span><span style="color:#ABB2BF"> {</span></span>
+<span class="line"><span style="color:#C678DD">        if</span><span style="color:#ABB2BF">(</span><span style="color:#E06C75">prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#ABB2BF">] </span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">]){</span></span>
+<span class="line"><span style="color:#E06C75">            profit</span><span style="color:#E5C07B"> +=</span><span style="color:#E06C75"> prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#ABB2BF">] </span><span style="color:#C678DD">-</span><span style="color:#E06C75"> prices</span><span style="color:#ABB2BF">[</span><span style="color:#E06C75">i</span><span style="color:#C678DD">-</span><span style="color:#D19A66">1</span><span style="color:#ABB2BF">]</span></span>
+<span class="line"><span style="color:#ABB2BF">        }</span></span>
+<span class="line"><span style="color:#ABB2BF">    }</span></span>
+<span class="line"><span style="color:#C678DD">    return</span><span style="color:#E06C75"> profit</span></span>
+<span class="line"><span style="color:#ABB2BF">  }</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4>测试用例</h4>
+<figure><figcaption>贪心算法测试用例</figcaption></figure>
+<h4>分析</h4>
+<ul>
+<li>时间复杂度 <strong>O(n)</strong>: 其中 n 是数组的长度。这是由于函数需要遍历数组中的每个元素。</li>
+<li>空间复杂度 <strong>O(1)</strong>：因为该函数只使用了常量级别的额外空间。</li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
