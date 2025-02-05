@@ -1,15 +1,21 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
-echo "deploy front env-----------------------"
+# 确保脚本抛出遇到的错误
+set -e
 
-echo "build online file"
-pnpm build
+# 生成静态文件
+npm run build
 
-echo "clean dist"
-ssh root@singlequote.cn "rm -rf /etc/nginx/www/blog/dist/*"
-echo "clean done"
+# 进入生成的文件夹
+cd src/.vuepress/dist
 
-echo "upload to server"
-scp -r ./src/.vuepress/dist/* root@43.134.15.128:/etc/nginx/www/blog/dist/
-echo "done"
-
+# 如果是发布到自定义域名
+echo 'singlequote.cn' > CNAME
+git init
+git add -A
+git commit -m 'deploy'
+# 如果发布到 https://<USERNAME>.github.io
+git push -f git@github.com:t13219006372/t13219006372.github.io.git release
+# 如果发布到 https://<USERNAME>.github.io/<REPO>
+# git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+cd -
