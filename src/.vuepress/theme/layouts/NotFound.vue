@@ -12,7 +12,7 @@
         </div>
         <div class="actions">
           <button class="action-button left" @click="goBack">返回上一页</button>
-          <button class="action-button right" @click="navigate">带我回家</button>
+          <button class="action-button right" @click="navigate">返回首页</button>
         </div>
       </div>
     </main>

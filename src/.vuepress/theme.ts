@@ -46,7 +46,7 @@ export default MyTheme({
       // Gitee: "https://example.com",
       GitHub: 'https://github.com/t13219006372',
       // Gitlab: "https://example.com",
-      Gmail: 'mailto:tangmenghanm@gmail.com',
+      Gmail: 'mailto:tangmenghanm@gmail.com'
       // Instagram: "https://example.com",
       // Lark: "https://example.com",
       // Lines: "https://example.com",
@@ -132,31 +132,31 @@ export default MyTheme({
     feed: {
       rss: true
     },
-    comment: {
-      provider: 'Artalk',
-      server: 'https://talk.singlequote.cn', // your server url
-      site: 'blog.singlequote.cn',
-      // reaction: true,
-      // requiredMeta: ['nick'],
-      // wordLimit: 300,
-      // emoji: [
-      //   'https://unpkg.com/@waline/emojis@1.1.0/tieba',
-      //   'https://unpkg.com/@waline/emojis@1.1.0/weibo',
-      //   'https://emoji.shojo.cn/bili/webp/tv_小电视_动图',
-      //   'https://emoji.shojo.cn/bili/webp/罗小黑战记',
-      //   'https://emoji.shojo.cn/bili/webp/2233娘',
-      //   'https://emoji.shojo.cn/bili/webp/装扮小姐姐梦幻冬季',
-      //   'https://emoji.shojo.cn/bili/webp/装扮小姐姐·秋日午后',
-      //   'https://emoji.shojo.cn/bili/webp/星尘',
-      //   'https://emoji.shojo.cn/bili/webp/池年'
-      // ],
-      // locales: {
-      //   '/': {
-      //     placeholder: '欢迎留言~ _(≧∇≦」∠)_ (填写常用邮箱即可快速收到回复通知~)'
-      //   }
-      // }
-      locale: 'zh-CN'
-    },
+    // comment: {
+    //   provider: 'Artalk',
+    //   server: 'https://talk.singlequote.cn', // your server url
+    //   site: 'blog.singlequote.cn',
+    //   // reaction: true,
+    //   // requiredMeta: ['nick'],
+    //   // wordLimit: 300,
+    //   // emoji: [
+    //   //   'https://unpkg.com/@waline/emojis@1.1.0/tieba',
+    //   //   'https://unpkg.com/@waline/emojis@1.1.0/weibo',
+    //   //   'https://emoji.shojo.cn/bili/webp/tv_小电视_动图',
+    //   //   'https://emoji.shojo.cn/bili/webp/罗小黑战记',
+    //   //   'https://emoji.shojo.cn/bili/webp/2233娘',
+    //   //   'https://emoji.shojo.cn/bili/webp/装扮小姐姐梦幻冬季',
+    //   //   'https://emoji.shojo.cn/bili/webp/装扮小姐姐·秋日午后',
+    //   //   'https://emoji.shojo.cn/bili/webp/星尘',
+    //   //   'https://emoji.shojo.cn/bili/webp/池年'
+    //   // ],
+    //   // locales: {
+    //   //   '/': {
+    //   //     placeholder: '欢迎留言~ _(≧∇≦」∠)_ (填写常用邮箱即可快速收到回复通知~)'
+    //   //   }
+    //   // }
+    //   locale: 'zh-CN'
+    // },
     prismjs: false,
     copyright: {
       author: 'SingleQuote',
